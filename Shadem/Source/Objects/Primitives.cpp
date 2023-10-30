@@ -91,3 +91,27 @@ void Primitives::Cube::Draw(Shader& shader, glm::mat4 projection, glm::mat4 view
 
 	mesh->Draw(shader);
 }
+
+Primitives::RMSphere::RMSphere(glm::vec3 position, glm::vec3 scale, const char* fShaderPath) : RMObject(position, scale, fShaderPath)
+{
+
+}
+
+void Primitives::RMSphere::Draw(Camera &camera)
+{
+	shader.use();
+	/*
+		definicje view przeniesc do kamery, aby mogla zwrocic sama rotacje bez przesuniecia
+	*/
+	glm::mat4 view = glm::mat4{glm::vec4(camera.Right,0),
+					 glm::vec4(camera.Up,   0),
+					 glm::vec4(camera.Front,0), 
+					 glm::vec4(camera.Right,1)};
+
+	shader.setMat4("View", view);
+	shader.setVec3("CameraPos", camera.Position);
+	shader.setVec3("SpherePos", position);
+	shader.setFloat("Zoom", camera.Zoom);
+
+	mesh->Draw(shader);
+}
