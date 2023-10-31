@@ -61,10 +61,13 @@ int main()
 
 	Primitives::Plane plane(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f));
 	Primitives::Cube cube(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(2.0f));
+	Primitives::RMSphere sphere(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(1.0f), "../Shadem/Shaders/RMShaders/SphereFshader.glsl");
 
 	Shader shader("../Shadem/Shaders/BasicShader/Vshader.glsl", "../Shadem/Shaders/BasicShader/Fshader.glsl");
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.2f, 0.3f, 0.7f, 1.0f);
@@ -76,14 +79,17 @@ int main()
 		lastFrame = currentFrame;
 		processInput(window);
 
-		shader.use();
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 250.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 
 		// render the cubes
+		shader.use();
 		plane.Draw(shader, projection, view);
 		cube.Draw(shader, projection, view);
+
+		sphere.Draw(camera);
+
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
