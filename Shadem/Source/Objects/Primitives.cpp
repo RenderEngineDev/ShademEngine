@@ -1,4 +1,4 @@
-#include "Primitives.h"
+#include "Objects/Primitives.h"
 
 Primitives::Plane::Plane(glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) : Object(position, scale) {
 	setupPrimitiveMesh();
