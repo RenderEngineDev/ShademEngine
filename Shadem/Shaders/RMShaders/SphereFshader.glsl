@@ -73,15 +73,20 @@ vec4 ray_march(in vec3 ro, in vec3 rd, in double beta)
 void main()
 {
     vec2 res = vec2(1920.0f, 1080.0f);
-
-    vec2 uv = (vec2(gl_FragCoord) - 0.5*res) / res.y;
+    float ratio = 1920.0/1080.0;
+    vec2 uv = (vec2(gl_FragCoord) - 0.5*res) / res.x;
     //vec2 uv = vec2(FragPos);
     vec3 ro = CameraPos;
-    vec3 rdBR = vec3(uv.x, uv.y, 45.0f/Zoom);
+    vec3 rdBR = vec3(uv.x, uv.y, (45/Zoom * radians(45) - 0.1));
     vec3 rd = normalize(vec3(View * vec4(rdBR, 0.0) ));
 
+    vec3 w = mat3(View) * 
+	        normalize(vec3((gl_FragCoord.xy - res / 2.0) * 
+	        		vec2(-1, 1), res.y / 
+		( -2.0 * tan(Zoom/2))));
 
-    double beta = dot(rd , Forward);
+
+    double beta = 1.0; //dot(rd , Forward);
     //rd = vec3(uv, 1.0);
 
 	FragColor = ray_march(ro, rd, beta);

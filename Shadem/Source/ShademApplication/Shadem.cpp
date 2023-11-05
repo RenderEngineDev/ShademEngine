@@ -61,7 +61,7 @@ int main()
 
 	Primitives::Plane plane(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f));
 	Primitives::Cube cube(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(1.0f));
-	Primitives::RMSphere sphere(glm::vec3(0.0f, 0.0f, 30.0f), glm::vec3(1.0f), "../Shadem/Shaders/RMShaders/SphereFshader.glsl");
+	Primitives::RMSphere sphere(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(0.0f), "../Shadem/Shaders/RMShaders/SphereFshader.glsl");
 
 	Shader shader("../Shadem/Shaders/BasicShader/Vshader.glsl", "../Shadem/Shaders/BasicShader/Fshader.glsl");
 
