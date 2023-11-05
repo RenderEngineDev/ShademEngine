@@ -101,22 +101,38 @@ void Primitives::RMSphere::Draw(Camera &camera)
 {
 	shader.use();
 	//glm::mat4 model = glm::mat4(1.0f);
-	//model = glm::translate(model, position);
+	////model = glm::translate(model, position);
 	//model = glm::scale(model, scale);
 	//shader.setMat4("projection", projection);
 
 
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::rotate(view, glm::radians(camera.Pitch), glm::vec3(1.0f, 0.0f, 0.0f));
-	view = glm::rotate(view, glm::radians(camera.Yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+	//glm::mat4 view = glm::mat4(1.0f);
+	//view = glm::rotate(view, glm::radians(-camera.Pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+	//view = glm::rotate(view, glm::radians(camera.Yaw - 90), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	//glm::vec3 spherePos = rot * glm::vec4(camera.Position, 1.0f);
-	//shader.setMat4("View", glm::lookAt(glm::vec3(0.0f), camera.Position + camera.Front, camera.Front));
+	//glm::vec3 camPos = glm::vec3(camera.Position.x, camera.Position.y, camera.Position.z);
+	////shader.setMat4("View", glm::lookAt(glm::vec3(0.0f), camera.Position + camera.Front, camera.Front));
+
+	//float alpha = glm::dot(glm::vec3(0.0, 0.0, 1.0), camera.Front);
+
+	//view = glm::mat4(1.0f);
+	//view = glm::rotate(view, alpha, glm::cross(glm::vec3(0.0, 0.0, 1.0), camera.Front));
+
+	glm::mat4 view = glm::mat4{glm::vec4(camera.Right,0),
+					 glm::vec4(camera.Up,   0),
+					 glm::vec4(camera.Front,0), 
+					 glm::vec4(camera.Right,1)};
+	//view = glm::lookAt(camera.Position, camera.Position + camera.Front, camera.Up);
 	shader.setMat4("View", view);
 	shader.setVec3("CameraPos", camera.Position);
 	shader.setVec3("SpherePos", position);
 	shader.setFloat("Zoom", camera.Zoom);
 	shader.setMat4("Projection", glm::perspective(glm::radians(camera.Zoom), 1920.0f / 1080.0f, 0.1f, 250.0f));
+	shader.setVec3("Forward", camera.Front);
+
+	//std::cout << alpha << "\n";
+	//std::cout << "x: " << camera.Front.x << " y: " << camera.Front.y << " z: " << camera.Front.z << "\n";
+	//std::cout << "x: " << position.x << " y: " << position.y << " z: " << position.z << "\n";
 
 	mesh->Draw(shader);
 }
