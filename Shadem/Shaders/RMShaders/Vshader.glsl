@@ -6,7 +6,7 @@ layout (location = 2) in vec3 aTexCoords;
 out vec3 FragPos;
 
 void main()
-{
-    FragPos = vec3(vec4(aPos, 1.0));
+{ 
+    FragPos = aPos;
 	gl_Position = vec4(aPos, 1.0);
 }
