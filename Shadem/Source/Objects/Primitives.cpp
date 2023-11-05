@@ -128,6 +128,7 @@ void Primitives::RMSphere::Draw(Camera &camera)
 	shader.setVec3("SpherePos", position);
 	shader.setFloat("Zoom", camera.Zoom);
 	shader.setMat4("Projection", glm::perspective(glm::radians(camera.Zoom), 1920.0f / 1080.0f, 0.1f, 250.0f));
+	//shader.setMat4("Projection", glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, 0.1f, 250.0f));
 	shader.setVec3("Forward", camera.Front);
 
 	//std::cout << alpha << "\n";
