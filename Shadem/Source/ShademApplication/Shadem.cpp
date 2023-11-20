@@ -12,6 +12,9 @@
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 
+//#define SCREEN_WIDTH 800
+//#define SCREEN_HEIGHT 600
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -36,6 +39,8 @@ int main()
 
 
 	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Shadem", NULL, NULL);
+	//GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Shadem", glfwGetPrimaryMonitor(), NULL);
+
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	if (window == NULL)
@@ -62,6 +67,7 @@ int main()
 	Primitives::Plane plane(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f));
 	Primitives::Cube cube(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(1.0f));
 	Primitives::RMSphere sphere(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(0.0f), "../Shadem/Shaders/RMShaders/SphereFshader.glsl");
+	Primitives::RMSphere sphere2(glm::vec3(10.0f, 0.0f, 35.0f), glm::vec3(0.0f), "../Shadem/Shaders/RMShaders/SphereFshader.glsl");
 
 	Shader shader("../Shadem/Shaders/BasicShader/Vshader.glsl", "../Shadem/Shaders/BasicShader/Fshader.glsl");
 
@@ -83,12 +89,18 @@ int main()
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 250.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 
+
 		// render the cubes
 		shader.use();
 		plane.Draw(shader, projection, view);
 		cube.Draw(shader, projection, view);
 
+		
+		glDisable(GL_DEPTH_TEST);
 		sphere.Draw(camera);
+		sphere2.Draw(camera);
+		glEnable(GL_DEPTH_TEST);
+
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
