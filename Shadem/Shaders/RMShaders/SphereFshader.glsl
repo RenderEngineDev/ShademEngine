@@ -6,38 +6,36 @@ in vec3 FragPos;
 
 uniform mat4 Model;
 uniform mat4 View;
-uniform mat4 Projection;
 uniform vec3 CameraPos;
 uniform vec3 SpherePos;
 uniform float Zoom;
-uniform vec3 Forward;
 
 float distance_from_sphere(in vec3 p, in vec3 c, float r)
 {
 	return length(p - c) - r;
 }
 
-float map_the_world(in vec3 p, in double beta)
+float map_the_world(in vec3 p)
 {
-    float sphere = float(distance_from_sphere(p, SpherePos, 1.0) * beta);
+    float sphere = float(distance_from_sphere(p, SpherePos, 1.0) );
 
     return sphere;
 }
 
-vec3 calculate_normal(in vec3 p, in double beta)
+vec3 calculate_normal(in vec3 p)
 {
     const vec3 small_step = vec3(0.001, 0.0, 0.0);
 
-    float gradient_x = map_the_world(p + small_step.xyy, beta) - map_the_world(p - small_step.xyy, beta);
-    float gradient_y = map_the_world(p + small_step.yxy, beta) - map_the_world(p - small_step.yxy, beta);
-    float gradient_z = map_the_world(p + small_step.yyx, beta) - map_the_world(p - small_step.yyx, beta);
+    float gradient_x = map_the_world(p + small_step.xyy) - map_the_world(p - small_step.xyy);
+    float gradient_y = map_the_world(p + small_step.yxy) - map_the_world(p - small_step.yxy);
+    float gradient_z = map_the_world(p + small_step.yyx) - map_the_world(p - small_step.yyx);
 
     vec3 normal = vec3(gradient_x, gradient_y, gradient_z);
 
     return normalize(normal);
 }
 
-vec4 ray_march(in vec3 ro, in vec3 rd, in double beta)
+vec4 ray_march(in vec3 ro, in vec3 rd)
 {
     float total_distance_traveled = 0.0;
     const int NUMBER_OF_STEPS = 32;
@@ -48,11 +46,11 @@ vec4 ray_march(in vec3 ro, in vec3 rd, in double beta)
     {
         vec3 current_position = ro + total_distance_traveled * rd;
 
-        float distance_to_closest = map_the_world(current_position, beta);
+        float distance_to_closest = map_the_world(current_position);
 
         if (distance_to_closest < MINIMUM_HIT_DISTANCE)
         {
-            vec3 normal = calculate_normal(current_position, beta);
+            vec3 normal = calculate_normal(current_position);
             vec3 light_position = SpherePos + vec3(2.0, -5.0, 3.0);
             vec3 direction_to_light = normalize(current_position - light_position);
 
@@ -73,21 +71,12 @@ vec4 ray_march(in vec3 ro, in vec3 rd, in double beta)
 void main()
 {
     vec2 res = vec2(1920.0f, 1080.0f);
-    float ratio = 1920.0/1080.0;
-    vec2 uv = (vec2(gl_FragCoord) - 0.5*res) / res.x;
-    //vec2 uv = vec2(FragPos);
+
+    vec2 uv = (vec2(gl_FragCoord) - 0.5*res);
     vec3 ro = CameraPos;
-    vec3 rdBR = vec3(uv.x, uv.y, (45/Zoom * radians(45) - 0.1));
-    vec3 rd = normalize(vec3(View * vec4(rdBR, 0.0) ));
 
-    vec3 w = mat3(View) * 
-	        normalize(vec3((gl_FragCoord.xy - res / 2.0) * 
-	        		vec2(-1, 1), res.y / 
-		( -2.0 * tan(Zoom/2))));
-
-
-    double beta = 1.0; //dot(rd , Forward);
-    //rd = vec3(uv, 1.0);
-
-	FragColor = ray_march(ro, rd, beta);
+    vec3 rdBR = vec3(uv.x, uv.y,  (res.y*0.5) / tan(radians(Zoom * 0.5)) );          // works?
+    vec3 rd = normalize(vec3((View) * vec4(rdBR, 0.0) ));
+ 
+	FragColor = ray_march(ro, rd);
 }
