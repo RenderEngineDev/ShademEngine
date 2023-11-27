@@ -22,7 +22,7 @@ protected:
 private:
 	
 
-	virtual void setupPrimitiveMesh() override;
+	virtual void setupMesh() override;
 
 public:
 	RMObject(glm::vec3 position, glm::vec3 scale, const char* fShaderPath);

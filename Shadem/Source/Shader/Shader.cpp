@@ -1,5 +1,11 @@
-#include "Shader/Shader.h"
+#pragma once
+
 #include <filesystem>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <stb_image.h>
+
+#include "Shader/Shader.h"
 
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)

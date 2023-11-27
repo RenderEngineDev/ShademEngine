@@ -1,10 +1,10 @@
 #include "Objects/Primitives.h"
 
 Primitives::Plane::Plane(glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) : Object(position, scale) {
-	setupPrimitiveMesh();
+	setupMesh();
 }
 
-void Primitives::Plane::setupPrimitiveMesh() {
+void Primitives::Plane::setupMesh() {
 
 	std::vector<Vertex> vertices = std::vector<Vertex>({
 		{ glm::vec3( 1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) },
@@ -25,7 +25,7 @@ void Primitives::Plane::setupPrimitiveMesh() {
 	TODO: 
 	przenieœæ projection i view do jakiegoœ zewnêtrznego renderera, który bêdzie ich referencje wykorzystywa³ przy rysowaniu wszystkich obiektów
 */
-void Primitives::Plane::Draw(Shader& shader, glm::mat4 projection, glm::mat4 view) {
+void Primitives::Plane::Draw(Shader& shader, glm::mat4& projection, glm::mat4& view) {
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, scale);
@@ -33,14 +33,14 @@ void Primitives::Plane::Draw(Shader& shader, glm::mat4 projection, glm::mat4 vie
 	shader.setMat4("view", view);
 	shader.setMat4("model", model);
 
-	mesh->Draw(shader);
+	mesh->Draw();
 }
 
 Primitives::Cube::Cube(glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) : Object(position, scale) {
-	setupPrimitiveMesh();
+	setupMesh();
 }
 
-void Primitives::Cube::setupPrimitiveMesh() {
+void Primitives::Cube::setupMesh() {
 
 	std::vector<Vertex> vertices = std::vector<Vertex>({
 		{ glm::vec3(1.0f, -1.0f,  1.0f), glm::vec3(1.0f, -1.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.0f) },
@@ -81,7 +81,7 @@ void Primitives::Cube::setupPrimitiveMesh() {
 	TODO:
 	przenieœæ projection i view do jakiegoœ zewnêtrznego renderera, który bêdzie ich referencje wykorzystywa³ przy rysowaniu wszystkich obiektów
 */
-void Primitives::Cube::Draw(Shader& shader, glm::mat4 projection, glm::mat4 view) {
+void Primitives::Cube::Draw(Shader& shader, glm::mat4 &projection, glm::mat4 &view) {
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, scale);
@@ -89,7 +89,7 @@ void Primitives::Cube::Draw(Shader& shader, glm::mat4 projection, glm::mat4 view
 	shader.setMat4("view", view);
 	shader.setMat4("model", model);
 
-	mesh->Draw(shader);
+	mesh->Draw();
 }
 
 Primitives::RMSphere::RMSphere(glm::vec3 position, glm::vec3 scale, const char* fShaderPath) : RMObject(position, scale, fShaderPath)
@@ -97,21 +97,21 @@ Primitives::RMSphere::RMSphere(glm::vec3 position, glm::vec3 scale, const char* 
 
 }
 
-void Primitives::RMSphere::Draw(Camera &camera)
+void Primitives::RMSphere::Draw(Camera::Camera &camera)
 {
 	shader.use();
 	/*
 		definicje view przeniesc do kamery, aby mogla zwrocic sama rotacje bez przesuniecia
 	*/
-	glm::mat4 view = glm::mat4{glm::vec4(camera.Right,0),
-					 glm::vec4(camera.Up,   0),
-					 glm::vec4(camera.Front,0), 
-					 glm::vec4(camera.Right,1)};
+	glm::mat4 view = glm::mat4{glm::vec4(camera.right,0),
+					 glm::vec4(camera.up,   0),
+					 glm::vec4(camera.front,0), 
+					 glm::vec4(camera.right,1)};
 
 	shader.setMat4("View", view);
-	shader.setVec3("CameraPos", camera.Position);
+	shader.setVec3("CameraPos", camera.position);
 	shader.setVec3("SpherePos", position);
-	shader.setFloat("Zoom", camera.Zoom);
+	shader.setFloat("Zoom", camera.zoom);
 
-	mesh->Draw(shader);
+	mesh->Draw();
 }

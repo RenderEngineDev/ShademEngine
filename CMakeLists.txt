@@ -36,6 +36,19 @@ target_link_libraries(ShademEngine
 
 ########################################################################
 
+add_subdirectory(include/glad/)
+
+# Dodaj pliki glad do projektu
+add_library(glad STATIC
+    include/glad/glad.c
+    include/glad/glad.h
+)
+
+# Dodaj zależności glad do ShademEngine
+target_link_libraries(ShademEngine glad)
+
+########################################################################
+
 # Przenieś pliki nagłówkowe do folderu "Header Files" w projekcie Visual Studio
 foreach(header IN LISTS HEADER_FILES)
     get_filename_component(header_name "${header}" NAME)
@@ -67,3 +80,10 @@ endforeach()
 
 # Ustaw projekt startowy
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ShademEngine)
+
+# Ustaw widoczność folderów
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Stwórz foldery dla projektu głównego oraz dla dołączonych bibliotek
+set_target_properties(glad PROPERTIES FOLDER Libraries)
+set_target_properties(ShademEngine PROPERTIES FOLDER Develop)
