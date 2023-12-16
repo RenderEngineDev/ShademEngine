@@ -1,14 +1,14 @@
 #pragma once
 
-#include <glad/glad.h>
-
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "stb_image.h"
-#include <glm/glm.hpp>
 #include <vector>
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <stb_image.h>
 
 class Shader
 {
@@ -18,6 +18,7 @@ class Shader
 		unsigned int texture;
 
 		// constructor reads and builds the shader
+		Shader() {};
 		Shader(const char* vertexPath, const char* fragmentPath);
 		// use/activate the shader
 		void use();

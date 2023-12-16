@@ -3,10 +3,10 @@
 
 RMObject::RMObject(glm::vec3 position, glm::vec3 scale, const char* fShaderPath) : Object(position, scale), shader("../Shadem/Shaders/RMShaders/Vshader.glsl", fShaderPath)
 {
-	setupPrimitiveMesh();
+	setupMesh();
 }
 
-void RMObject::setupPrimitiveMesh()
+void RMObject::setupMesh()
 {
 	std::vector<Vertex> vertices = {
 	{ glm::vec3(-1.0f,  1.0f, 0.0f), glm::vec3(1.0f, -1.0f,  1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.0f) },
