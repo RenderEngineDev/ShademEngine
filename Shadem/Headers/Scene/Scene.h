@@ -11,6 +11,7 @@
 #include "Factory/LightObjectFactory.h"
 #include "Factory/CubeMarchingObjectFactory.h"
 #include "Factory/RayMarchingObjectFactory.h"
+#include "Objects/Attributes.h"
 
 // TODO: do przeniesienia (z ShademEngine.cpp te¿) - do window?
 
@@ -19,11 +20,6 @@ protected:
 	// TODO: pointery wszystkie do zamiany bêd¹ na smart pointery
 	std::vector<Object*> objects{};
 	Camera::Camera* camera = nullptr;
-	PrimitiveObjectFactory* primitiveFactory = new PrimitiveObjectFactory();
-	CubeMarchingObjectFactory* cubeMarchingFactory = new CubeMarchingObjectFactory();
-	RayMarchingObjectFactory* rayMarchingFactory = new RayMarchingObjectFactory();
-	ComplexObjectFactory* complexFactory = new ComplexObjectFactory();
-	LightObjectFactory* lightFactory = new LightObjectFactory();
 
 public:
 	Scene();
@@ -31,19 +27,18 @@ public:
 	virtual int configure() = 0;
 	virtual void initBasicObjects() = 0;
 
+	void update();
 	//int draw();
 	bool addObject(Object* object);
 	int getNumberOfObjects();
 
-	std::vector<Object*>& getObjects() { return objects; }
-
-	bool createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
-	bool createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
-	bool createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
-	bool createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, CubeMarchingAttributes objectAttribute);
-	bool createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
-
+	template<class FactoryType, class ObjectEnumType, class AttributeType>
+	inline bool createObject(ObjectEnumType objectType, AttributeType* attributes) {
+		return addObject(FactoryType::createObject(objectType.getType(), attributes));
+	}
+	
 	Camera::Camera* getCamera();
+	std::vector<Object*>& getObjects();
 
 	~Scene();
 

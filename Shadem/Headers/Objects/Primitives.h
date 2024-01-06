@@ -12,24 +12,27 @@ namespace Primitives {
 
 	class Plane : public Object {
 	public:
-		Plane(Shader* shader, glm::vec3 position, glm::vec3 scale);
+		Plane(ObjectAttributes::Common* attributes, Shader* shadere);
 		virtual void draw(Camera::Camera &camera) override;
+		virtual void update(Camera::Camera& camera) override;
 	private:
 		void setupMesh();
 	};
 
 	class Cube : public Object {
 	public:
-		Cube(Shader* shader, glm::vec3 position, glm::vec3 scale);
+		Cube(ObjectAttributes::Common* attributes, Shader* shader);
 		virtual void draw(Camera::Camera &camera) override;
+		virtual void update(Camera::Camera& camera) override;
 	private:
 		void setupMesh();
 	};
 
 	class RMSphere : public RMObject {
 	public:
-		RMSphere(glm::vec3 position, glm::vec3 scale, const char* fShaderPath);
+		RMSphere(ObjectAttributes::Sphereous* attributes, const char* fShaderPath);
 		virtual void draw(Camera::Camera& camera) override;
+		virtual void update(Camera::Camera& camera) override;
 	private:
 		//void setupMesh();
 	};

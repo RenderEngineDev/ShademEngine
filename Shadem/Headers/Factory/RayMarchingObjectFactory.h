@@ -2,8 +2,9 @@
 
 #include "Objects/Object.h"
 #include "Objects/ObjectTypes.h"
+#include "Objects/Attributes.h"
 
 class RayMarchingObjectFactory {
 public:
-	Object* createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
+	static Object* createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectAttributes::Common* attributes);
 };

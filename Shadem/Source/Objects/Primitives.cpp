@@ -1,6 +1,6 @@
 #include "Objects/Primitives.h"
 
-Primitives::Plane::Plane(Shader* shader, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) : Object(position, scale) {
+Primitives::Plane::Plane(ObjectAttributes::Common* attributes, Shader* shader) : Object(attributes) {
 	this->shader = shader;
 	setupMesh();
 }
@@ -25,8 +25,8 @@ void Primitives::Plane::setupMesh() {
 void Primitives::Plane::draw(Camera::Camera &camera) {
 	this->shader->use();
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, position);
-	model = glm::scale(model, scale);
+	model = glm::translate(model, attributes->position);
+	model = glm::scale(model, attributes->scale);
 	this->shader->setMat4("projection", camera.getProjection());
 	this->shader->setMat4("view", camera.getView());
 	this->shader->setMat4("model", model);
@@ -34,7 +34,11 @@ void Primitives::Plane::draw(Camera::Camera &camera) {
 	mesh->Draw();
 }
 
-Primitives::Cube::Cube(Shader* shader, glm::vec3 position = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) : Object(position, scale) {
+void Primitives::Plane::update(Camera::Camera& camera) {
+
+}
+
+Primitives::Cube::Cube(ObjectAttributes::Common* attributes, Shader* shader) : Object(attributes) {
 	this->shader = shader;
 	setupMesh();
 }
@@ -79,8 +83,8 @@ void Primitives::Cube::setupMesh() {
 void Primitives::Cube::draw(Camera::Camera &camera) {
 	this->shader->use();
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, position);
-	model = glm::scale(model, scale);
+	model = glm::translate(model, attributes->position);
+	model = glm::scale(model, attributes->scale);
 	this->shader->setMat4("projection", camera.getProjection());
 	this->shader->setMat4("view", camera.getView());
 	this->shader->setMat4("model", model);
@@ -88,15 +92,17 @@ void Primitives::Cube::draw(Camera::Camera &camera) {
 	mesh->Draw();
 }
 
-Primitives::RMSphere::RMSphere(glm::vec3 position, glm::vec3 scale, const char* fShaderPath) : RMObject(position, scale, fShaderPath)
+void Primitives::Cube::update(Camera::Camera& camera) {
+
+}
+
+Primitives::RMSphere::RMSphere(ObjectAttributes::Sphereous* attributes, const char* fShaderPath) : RMObject(attributes, fShaderPath)
 {
 
 }
 
 void Primitives::RMSphere::draw(Camera::Camera& camera)
 {
-	//glDisable(GL_DEPTH_TEST);
-
 	shader.use();
 	/*
 		definicje view przeniesc do kamery, aby mogla zwrocic sama rotacje bez przesuniecia
@@ -108,13 +114,15 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 
 	shader.setMat4("View", view);
 	shader.setVec3("CameraPos", camera.position);
-	shader.setVec3("SpherePos", position);
+	shader.setVec3("SpherePos", attributes->position);
 	shader.setFloat("Zoom", camera.zoom);
 	shader.setVec2("WindowSize", camera.window->getWindowSize());
-	shader.setVec3("Scale", scale);
+	shader.setVec3("Scale", attributes->scale);
 	shader.setVec2("CameraRange", camera.getRange());
 
 	mesh->Draw();
+}
 
-	//glEnable(GL_DEPTH_TEST);
+void Primitives::RMSphere::update(Camera::Camera& camera) {
+
 }

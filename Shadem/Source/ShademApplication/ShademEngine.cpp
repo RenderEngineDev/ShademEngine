@@ -31,17 +31,17 @@ int ShademEngine::run() {
 		checkAndReloadLevelSelection();
 		if (scene) { 
 			scene->getCamera()->processViewAndProjection();
+			scene->update();
 			renderer->draw(*scene);
 		}
 
 		gui->startGuiFrame();
-		gui->draw();
+		gui->draw(scene);
 		
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window->getGLFWwindow());
 		glfwPollEvents();
-
 	}
 	glfwTerminate();
 	return 1;
@@ -58,10 +58,10 @@ void ShademEngine::calculateFrameTime() {
 void ShademEngine::checkAndReloadLevelSelection() {
 	if (gui->listboxItemCurrent != -1) {
 		switch (gui->listboxItemCurrent) {
-		case 0: {gui->listboxItemCurrent = -1;	 reloadScene(new CmLevel());	 break; };
-		case 1: {gui->listboxItemCurrent = -1;	 reloadScene(new RmLevel());	 break; };
-		case 2: {gui->listboxItemCurrent = -1;	 reloadScene(new CustomLevel()); break; };
-		default: {gui->listboxItemCurrent = -1;  reloadScene(new CustomLevel()); break; };
+		case 0: {gui->setupStartUpProperties(); reloadScene(new CmLevel());	 break; };
+		case 1: {gui->setupStartUpProperties(); reloadScene(new RmLevel());	 break; };
+		case 2: {gui->setupStartUpProperties(); reloadScene(new CustomLevel()); break; };
+		default: {gui->setupStartUpProperties(); reloadScene(new CustomLevel()); break; };
 		}
 	}
 }
@@ -102,7 +102,7 @@ int ShademEngine::configure() {
 		glfwTerminate();
 		return -1;
 	}
-	gui->setupMenuProperties();
+	gui->setupStartUpProperties();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);

@@ -1,62 +1,97 @@
 #pragma once
 
 namespace ObjectTypes {
-	class Enum {
-	public:
-		enum Type	 {};
-	};
 
-	class PrimitiveObjectType : Enum {
-	public:
-		enum Type {
-			CUBE,
-			PLANE,
-			SPHERE,
-			CIRCLE,
-			CYLINDER,
-			TORUS,
-			CONE
-			// ... 
-		};
-	};
+    class PrimitiveObjectType {
+    public:
+        enum Type {
+            CUBE,
+            PLANE,
+            SPHERE,
+            CIRCLE,
+            CYLINDER,
+            TORUS,
+            CONE
+            // ... 
+        };
 
-	class LightObjectType : Enum {
-	public:
-		enum Type {
-			POINT_LIGHT,
-			DIRECTION_LIGHT,
-			POSITION_LIGHT,
-			SPOT_LIGHT
-		};
-	};
+        PrimitiveObjectType(Type type) : type(type) {}
+        Type getType() const {
+            return type;
+        }
 
-	class CubeMarchingObjectType : Enum {
-	public:
-		enum Type {
-			CUBE,
-			PLANE,
-			SPHERE,
-			RANDOM
-			// ... 
-		};
-	};
+    private:
+        Type type;
+    };
 
-	class RayMarchingObjectType : Enum {
-	public:
-		enum Type {
-			SPHERE,
-			CUBE
-			// ...
-		};
-	};
+    class LightObjectType {
+    public:
+        enum Type {
+            POINT_LIGHT,
+            DIRECTION_LIGHT,
+            POSITION_LIGHT,
+            SPOT_LIGHT
+        };
 
+        LightObjectType(Type type) : type(type) {}
+        Type getType() const {
+            return type;
+        }
 
-	// TODO: tutaj bêd¹ inne obiekty (jakie?), kamera chyba nie bêdzie obiektem
-	class ComplexObjectType : Enum {
-	public:
-		enum Type {
-			CAMERA,
-			// ...
-		};
-	};
+    private:
+        Type type;
+    };
+
+    class CubeMarchingObjectType {
+    public:
+        enum Type {
+            CUBE,
+            PLANE,
+            SPHERE,
+            RANDOM,
+            NOISE
+            // ... 
+        };
+
+        CubeMarchingObjectType(Type type) : type(type) {}
+        Type getType() const {
+            return type;
+        }
+
+    private:
+        Type type;
+    };
+
+    class RayMarchingObjectType {
+    public:
+        enum Type {
+            SPHERE,
+            CUBE
+            // ...
+        };
+
+        RayMarchingObjectType(Type type) : type(type) {}
+        Type getType() const {
+            return type;
+        }
+
+    private:
+        Type type;
+    };
+
+    class ComplexObjectType {
+    public:
+        enum Type {
+            CAMERA,
+            // ...
+        };
+
+        ComplexObjectType(Type type) : type(type) {}
+        Type getType() const {
+            return type;
+        }
+
+    private:
+        Type type;
+    };
 }

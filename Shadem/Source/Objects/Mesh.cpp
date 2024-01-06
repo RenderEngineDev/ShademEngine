@@ -47,7 +47,7 @@ void Mesh::setupMesh()
 	}
 	else {
 		// Do zabezpieczenia wyj¹tkami
-		std::cout << "ERROR: Binding BufferData of mesh failed: vertices are empty" << std::endl;
+		std::cout << "WARNING: Binding BufferData of mesh failed: vertices are empty" << std::endl;
 	}
 }
 
@@ -70,7 +70,7 @@ void Mesh::setupMeshWithouIndices()
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 		glBindVertexArray(0);
 	} else {
-		std::cout << "ERROR: Binding BufferData of mesh failed: vertices are empty" << std::endl;
+		std::cout << "WARNING: Binding BufferData of mesh failed: vertices are empty" << std::endl;
 	}
 }
 

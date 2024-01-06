@@ -13,8 +13,8 @@ int CustomLevel::configure() {
 }
 
 void CustomLevel::initBasicObjects() {
-	createObject(ObjectTypes::PrimitiveObjectType::CUBE, ObjectBasicAttributes(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(2.0f)));
-	createObject(ObjectTypes::PrimitiveObjectType::PLANE, ObjectBasicAttributes(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f)));
+	createObject<PrimitiveObjectFactory, ObjectTypes::PrimitiveObjectType, ObjectAttributes::Common>(ObjectTypes::PrimitiveObjectType(ObjectTypes::PrimitiveObjectType::CUBE), new ObjectAttributes::Common(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(2.0f)));
+	createObject<PrimitiveObjectFactory, ObjectTypes::PrimitiveObjectType, ObjectAttributes::Common>(ObjectTypes::PrimitiveObjectType(ObjectTypes::PrimitiveObjectType::PLANE), new ObjectAttributes::Common(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f)));
 }
 
 CustomLevel::~CustomLevel() {

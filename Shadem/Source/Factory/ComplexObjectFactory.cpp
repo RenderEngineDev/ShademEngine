@@ -3,7 +3,7 @@
 
 using namespace ObjectTypes;
 
-Object* ComplexObjectFactory::createObject(ComplexObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
+Object* ComplexObjectFactory::createObject(ComplexObjectType::Type objectType, ObjectAttributes::Common* attributes) {
     // TODO:
     return nullptr;
 }

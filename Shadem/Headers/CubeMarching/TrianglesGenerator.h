@@ -305,7 +305,7 @@ static constexpr int triangleTable[256][16] =
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
 };
 
-class MarchingCubes
+class TrianglesGenerator
 {
 private:
     glm::vec3 gridSize;
@@ -314,10 +314,10 @@ private:
 
 public:
 
-    MarchingCubes(glm::vec3 gridSize = glm::vec3(50)) : gridSize(gridSize) {
+    TrianglesGenerator(glm::vec3 gridSize = glm::vec3(50)) : gridSize(gridSize) {
     };
 
-    ~MarchingCubes() {
+    ~TrianglesGenerator() {
     }
 
     /**

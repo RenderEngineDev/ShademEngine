@@ -3,7 +3,7 @@
 
 using namespace ObjectTypes;
 
-Object* LightObjectFactory::createObject(LightObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
+Object* LightObjectFactory::createObject(LightObjectType::Type objectType, ObjectAttributes::Common* attributes) {
 	// TODO: trzeba zaimplementowaæ obiekty œwietlne :)
 	switch (objectType) {
 		case ObjectTypes::LightObjectType::POINT_LIGHT:
