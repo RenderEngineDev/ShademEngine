@@ -5,5 +5,5 @@
 
 class CubeMarchingObjectFactory {
 public:
-	Object* createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
+	Object* createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, CubeMarchingAttributes objectBasicAttribute);
 };

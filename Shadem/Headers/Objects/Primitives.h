@@ -30,7 +30,6 @@ namespace Primitives {
 	public:
 		RMSphere(glm::vec3 position, glm::vec3 scale, const char* fShaderPath);
 		virtual void draw(Camera::Camera& camera) override;
-		//virtual void draw(Camera::Camera &camera) override;
 	private:
 		//void setupMesh();
 	};

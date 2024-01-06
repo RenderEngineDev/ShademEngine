@@ -4,7 +4,9 @@
 
 using namespace ObjectTypes;
 
-Object* CubeMarchingObjectFactory::createObject(CubeMarchingObjectType::Type objectType, ObjectBasicAttributes attributes) {
+Object* CubeMarchingObjectFactory::createObject(CubeMarchingObjectType::Type objectType, CubeMarchingAttributes attributes) {
+	//CubeMarchingAttributes* cmAttributes = dynamic_cast<CubeMarchingAttributes*>(attributes);
+
 	switch (objectType) {
 		case ObjectTypes::CubeMarchingObjectType::CUBE:
 			// TODO:
@@ -13,9 +15,9 @@ Object* CubeMarchingObjectFactory::createObject(CubeMarchingObjectType::Type obj
 			// TODO:
 			return nullptr;
 		case ObjectTypes::CubeMarchingObjectType::SPHERE:
-			return new CmObject(MarchingCubeGenerator::StructureType::SPHERE, 80, 1.0f, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), attributes.position, attributes.radius);
+			return new CubeMarching::Sphere(attributes.gridSize, attributes.isoValue, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), attributes.position, attributes.scale, attributes.radius);
 		case ObjectTypes::CubeMarchingObjectType::RANDOM:
-			return new CmObject(MarchingCubeGenerator::StructureType::RANDOM, 50, 0.6f, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), attributes.position, attributes.radius);
+			return new CubeMarching::Random(attributes.gridSize, attributes.isoValue, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), attributes.position, attributes.scale);
 		default:
 			return nullptr;
 	}
