@@ -6,13 +6,16 @@
 
 #include <utility>
 #include <vector>
+
+#include <functional>
+
 #include "CubeMarching/Types.h"
 #include "Shader/Shader.h"
 #include "Objects/Mesh.h"
 
 
 /// edgeToVertices[i] = {a, b} => edge i joins vertices a and b
-static std::vector<std::pair<int, int>> edgeToVertices =
+static const std::vector<std::pair<int, int>> edgeToVertices =
 {
     {0, 1}, {1, 2}, {2, 3}, {0, 3},
     {4, 5}, {5, 6}, {6, 7}, {4, 7},
@@ -21,7 +24,7 @@ static std::vector<std::pair<int, int>> edgeToVertices =
 
 /// edgeTable[i] is a 12 bit number; i is a cubeIndex
 /// edgeTable[i][j] = 1 if isosurface intersects edge j for cubeIndex i
-static const int edgeTable[256] =
+static constexpr int edgeTable[256] =
 {
     0x000, 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c, 0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
     0x190, 0x099, 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c, 0x99c, 0x895, 0xb9f, 0xa96, 0xd9a, 0xc93, 0xf99, 0xe90,
@@ -42,7 +45,7 @@ static const int edgeTable[256] =
 };
 
 /// triangleTable[i] is a list of edges forming triangles for cubeIndex i
-static const int triangleTable[256][16] =
+static constexpr int triangleTable[256][16] =
 {
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -305,9 +308,17 @@ static const int triangleTable[256][16] =
 class MarchingCubes
 {
 private:
-    int isoGridSize;
+    glm::vec3 gridSize;
+
+private:
+
 public:
-    MarchingCubes(int isoGridSize) : isoGridSize(isoGridSize) {};
+
+    MarchingCubes(glm::vec3 gridSize = glm::vec3(50)) : gridSize(gridSize) {
+    };
+
+    ~MarchingCubes() {
+    }
 
     /**
      * Given a `cell`, calculate its cube index
@@ -331,9 +342,9 @@ public:
     void print_triangles(std::vector<std::vector<Point>> triangles);
 
     /// Get triangles of a single cell
-    std::vector<std::vector<Point>> triangulate_cell(GridCell& cell, float isovalue);
+    std::vector<std::vector<Point>> triangulate_cell(GridCell& cell, const float& isovalue);
 
     /// Triangulate a scalar field represented by `scalarFunction`. `isovalue` should be used for isovalue computation
-    std::vector<std::vector<Point>> triangulate_field(std::vector<std::vector<std::vector<float>>>& scalarFunction, float isovalue);
-    
+    std::vector<std::vector<Point>> triangulate_field(std::vector<std::vector<std::vector<float>>>& scalarFunction, const float& isovalue);
+
 };

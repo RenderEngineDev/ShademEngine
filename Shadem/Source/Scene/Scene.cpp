@@ -31,28 +31,29 @@ bool Scene::addObject(Object* object) {
 	return false;
 }
 
-bool Scene::createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
-	Object* object = primitiveFactory->createObject(objectType, objectBasicAttribute);
+// TODO: przerobiæ na template
+bool Scene::createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
+	Object* object = primitiveFactory->createObject(objectType, objectAttribute);
 	return addObject(object);
 }
 
-bool Scene::createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
-	Object* object = lightFactory->createObject(objectType, objectBasicAttribute);
+bool Scene::createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
+	Object* object = lightFactory->createObject(objectType, objectAttribute);
 	return addObject(object);
 }
 
-bool Scene::createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
-	Object* object = complexFactory->createObject(objectType, objectBasicAttribute);
+bool Scene::createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
+	Object* object = complexFactory->createObject(objectType, objectAttribute);
 	return addObject(object);
 }
 
-bool Scene::createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
-	Object* object = cubeMarchingFactory->createObject(objectType, objectBasicAttribute);
+bool Scene::createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, CubeMarchingAttributes objectAttribute) {
+	Object* object = cubeMarchingFactory->createObject(objectType, objectAttribute);
 	return addObject(object);
 }
 
-bool Scene::createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
-	Object* object = rayMarchingFactory->createObject(objectType, objectBasicAttribute);
+bool Scene::createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
+	Object* object = rayMarchingFactory->createObject(objectType, objectAttribute);
 	return addObject(object);
 }
 

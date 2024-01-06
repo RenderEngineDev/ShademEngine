@@ -37,11 +37,11 @@ public:
 	bool addObject(Object* object);
 	int getNumberOfObjects();
 
-	bool createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
-	bool createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
-	bool createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
-	bool createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
-	bool createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
+	bool createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
+	bool createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
+	bool createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
+	bool createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, CubeMarchingAttributes objectAttribute);
+	bool createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
 
 	Camera::Camera* getCamera();
 
