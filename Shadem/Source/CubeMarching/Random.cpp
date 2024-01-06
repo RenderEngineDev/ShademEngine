@@ -4,25 +4,29 @@
 
 using namespace CubeMarching;
 
-Random::Random(glm::vec3 gridSize, float isoValue, Shader* shader, glm::vec3 position, glm::vec3 scale) : CmObject(gridSize, isoValue, shader, position, scale) {
+Random::Random(ObjectAttributes::CubeMarching* attributes, Shader* shader) : CmObject(attributes, shader) {
 	setupMesh();
 }
 
 void Random::draw(Camera::Camera& camera) {
 	shader->use();
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, position);
-	model = glm::scale(model, glm::vec3(4.0f * scale));
+	model = glm::translate(model, attributes->position);
+	model = glm::scale(model, glm::vec3(1.0f * attributes->scale));
 	shader->setMat4("projection", camera.getProjection());
 	shader->setMat4("view", camera.getView());
 	shader->setMat4("model", model);
 	mesh->DrawWithoutIndices();
 }
 
+void Random::update(Camera::Camera& camera) {
+
+}
+
 void Random::setupMesh() {
-	marchingCubes = new MarchingCubes(gridSize);
-	gridGenerator = new GridGenerator(gridSize);
-	std::vector<std::vector<Point>> triangles = marchingCubes->triangulate_field(gridGenerator->generate_random_grid(), isoValue);
+	trianglesGenerator = new TrianglesGenerator(attributes->gridSize);
+	gridGenerator = new GridGenerator(attributes->gridSize);
+	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_random_grid(), attributes->isoValue);
 	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
 	mesh = new Mesh(vertices, std::vector<Texture>{});
 }

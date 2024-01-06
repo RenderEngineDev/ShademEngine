@@ -4,11 +4,11 @@
 
 using namespace ObjectTypes;
 
-Object* RayMarchingObjectFactory::createObject(RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
+Object* RayMarchingObjectFactory::createObject(RayMarchingObjectType::Type objectType, ObjectAttributes::Common* attributes) {
 	// TODO:
 	switch (objectType) {
 		case ObjectTypes::RayMarchingObjectType::SPHERE:
-			return new Primitives::RMSphere(objectBasicAttribute.position, objectBasicAttribute.scale, Shaders::getRmSphereFragmentShaderPath());
+			return new Primitives::RMSphere(dynamic_cast<ObjectAttributes::Sphereous*>(attributes), Shaders::getRmSphereFragmentShaderPath());
 		case ObjectTypes::RayMarchingObjectType::CUBE:
 			return nullptr;
 		default:

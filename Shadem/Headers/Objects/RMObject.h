@@ -27,7 +27,7 @@ private:
 	virtual void setupMesh() override;
 
 public:
-	RMObject(glm::vec3 position, glm::vec3 scale, const char* fShaderPath);
+	RMObject(ObjectAttributes::Common* attributes, const char* fShaderPath);
 	virtual void draw(Camera::Camera& camera) = 0;
 	~RMObject() {
 	}

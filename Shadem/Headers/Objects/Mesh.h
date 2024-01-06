@@ -49,12 +49,11 @@ public:
 	unsigned int getVBO() const;
 	unsigned int getEBO() const;
 
-private:
-	// render data
-	unsigned int VAO, VBO, EBO;
-
 	void setupMesh();
 
 	void setupMeshWithouIndices();
 
+private:
+	// render data
+	unsigned int VAO, VBO, EBO;
 };

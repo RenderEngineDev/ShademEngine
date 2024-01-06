@@ -2,8 +2,9 @@
 
 #include "Objects/Object.h"
 #include "Objects/ObjectTypes.h"
+#include "Objects/Attributes.h"
 
 class CubeMarchingObjectFactory {
 public:
-	Object* createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, CubeMarchingAttributes objectBasicAttribute);
+	static Object* createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, ObjectAttributes::Common* attributes);
 };

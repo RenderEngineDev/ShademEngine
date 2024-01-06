@@ -9,7 +9,7 @@
 
 namespace Controller {
 
-	// TODO: do zmiany dla wielu kontrolerów
+	// TODO: do zmiany dla wielu kontrolerów(?)
 	class Controller {
 	public:
 

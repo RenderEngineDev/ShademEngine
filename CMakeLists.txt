@@ -75,7 +75,7 @@ target_link_libraries(ShademEngine glad)
 
 add_subdirectory(include/imgui/)
 
-# Dodaj pliki glad do projektu
+# Dodaj pliki imgui do projektu
 add_library(imgui STATIC
     include/imgui/imconfig.h
     include/imgui/imgui.cpp
@@ -97,6 +97,21 @@ add_library(imgui STATIC
 
 # Dodaj zależności imgui do ShademEngine
 target_link_libraries(ShademEngine imgui)
+
+########################################################################
+### IMGUI
+########################################################################
+
+add_subdirectory(include/PerlinNoise/)
+
+# Dodaj pliki perlin do projektu
+add_library(perlin STATIC
+    include/PerlinNoise/SimplexNoise.cpp
+    include/PerlinNoise/SimplexNoise.h
+)
+
+# Dodaj zależności perlin do ShademEngine
+target_link_libraries(ShademEngine perlin)
 
 ########################################################################
 # Przenieś pliki nagłówkowe do folderu "Header Files" w projekcie Visual Studio
@@ -137,4 +152,5 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Stwórz foldery dla projektu głównego oraz dla dołączonych bibliotek
 set_target_properties(glad PROPERTIES FOLDER Libraries)
 set_target_properties(imgui PROPERTIES FOLDER Libraries)
+set_target_properties(perlin PROPERTIES FOLDER Libraries)
 set_target_properties(ShademEngine PROPERTIES FOLDER Develop)

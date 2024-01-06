@@ -5,6 +5,8 @@
 #include <vector>
 #include "CubeMarching/GridGenerator.h"
 #include "CubeMarching/Types.h"
+#include "PerlinNoise/SimplexNoise.h"
+#include <chrono>
 
 using namespace MarchingCubeGenerator;
 
@@ -20,8 +22,7 @@ GridGenerator::GridGenerator(glm::vec3 gridSize) {
     this->gridSize = gridSize;
 }
 
-std::vector<std::vector<std::vector<float>>> GridGenerator::generate_random_grid()
-{
+std::vector<std::vector<std::vector<float>>> GridGenerator::generate_random_grid() {
 	std::vector<std::vector<std::vector<float>>> scalarFunction(gridSize.x, std::vector<std::vector<float>>(gridSize.y, std::vector<float>(gridSize.z)));
 
 	for (int i = 0; i < gridSize.x; i++) {
@@ -79,6 +80,23 @@ std::vector<std::vector<std::vector<float>>> GridGenerator::generate_nested_sphe
 			}
 		}
 	}
+	return scalarFunction;
+}
+
+std::vector<std::vector<std::vector<float>>> GridGenerator::generate_noise(float &frequency, float &amplitude, float &lacunarity, float &persistence, glm::vec3 &offset, std::vector<std::vector<std::vector<float>>> &scalarFunction) {
+	SimplexNoise perlin(frequency, amplitude, lacunarity, persistence);
+	int i, j, k;
+	float octaves = 5.0f;
+
+	#pragma omp parallel for private(i, j, k) collapse(3)
+	for (i = 0; i < (int)gridSize.x; i++) {
+		for (j = 0; j < (int)gridSize.y; j++) {
+			for (k = 0; k < (int)gridSize.z; k++) {
+				scalarFunction[i][j][k] = perlin.fractal(octaves, (i + offset.x) / gridSize.x, (j + offset.y) / gridSize.y, (k + offset.z) / gridSize.z);
+			}
+		}
+	}
+
 	return scalarFunction;
 }
 

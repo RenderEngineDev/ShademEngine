@@ -20,10 +20,10 @@ namespace MarchingCubeGenerator{
         std::vector<std::vector<std::vector<float>>> generate_random_grid();
         std::vector<std::vector<std::vector<float>>> generate_sphere();
         std::vector<std::vector<std::vector<float>>> generate_nested_spheres();
+        std::vector<std::vector<std::vector<float>>> generate_noise(float& frequency, float& amplitude, float& lacunarity, float& persistence, glm::vec3& offset, std::vector<std::vector<std::vector<float>>>& scalarFunction);
         std::vector<std::vector<std::vector<float>>> read_grid_from_file(const char* path);
 
 
-        // TODO: Po wprowadzeniu mo¿liwoœci modyfikowania obiektu Cube Marching w czasie rzeczywistym zaimplementowaæ - 
-        //		 metodê update, która bêdzie przyjmowaæ grida i aktualizowa³a wartoœci w zale¿noœci od akcji 
+        // TODO: przechowywaæ siatke punktów i zrobiæ metodê do update (do trybu edycji w przyszlosci)
     };
 }

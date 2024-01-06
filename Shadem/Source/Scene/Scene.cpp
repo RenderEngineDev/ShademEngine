@@ -23,6 +23,12 @@ int Scene::getNumberOfObjects() {
 //	return 1;
 //}
 
+void Scene::update() {
+	for (Object* object : objects) {
+		object->update(*camera);
+	}
+}
+
 bool Scene::addObject(Object* object) {
 	if (object) {
 		objects.push_back(std::move(object));
@@ -31,34 +37,12 @@ bool Scene::addObject(Object* object) {
 	return false;
 }
 
-// TODO: przerobiæ na template
-bool Scene::createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
-	Object* object = primitiveFactory->createObject(objectType, objectAttribute);
-	return addObject(object);
-}
-
-bool Scene::createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
-	Object* object = lightFactory->createObject(objectType, objectAttribute);
-	return addObject(object);
-}
-
-bool Scene::createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
-	Object* object = complexFactory->createObject(objectType, objectAttribute);
-	return addObject(object);
-}
-
-bool Scene::createObject(ObjectTypes::CubeMarchingObjectType::Type objectType, CubeMarchingAttributes objectAttribute) {
-	Object* object = cubeMarchingFactory->createObject(objectType, objectAttribute);
-	return addObject(object);
-}
-
-bool Scene::createObject(ObjectTypes::RayMarchingObjectType::Type objectType, ObjectBasicAttributes objectAttribute) {
-	Object* object = rayMarchingFactory->createObject(objectType, objectAttribute);
-	return addObject(object);
-}
-
 Camera::Camera* Scene::getCamera() {
 	return camera;
+}
+
+std::vector<Object*>& Scene::getObjects() {
+	return objects;
 }
 
 Scene::~Scene() {
@@ -66,10 +50,5 @@ Scene::~Scene() {
 	for (auto object : objects) {
 		delete object;
 	}
-	delete primitiveFactory;
-	delete cubeMarchingFactory;
-	delete rayMarchingFactory;
-	delete complexFactory;
-	delete lightFactory;
 	delete camera;
 }

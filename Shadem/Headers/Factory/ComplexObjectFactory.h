@@ -2,8 +2,9 @@
 
 #include "Objects/Object.h"
 #include "Objects/ObjectTypes.h"
+#include "Objects/Attributes.h"
 
 class ComplexObjectFactory {
 public:
-	Object* createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
+	static Object* createObject(ObjectTypes::ComplexObjectType::Type objectType, ObjectAttributes::Common* attributes);
 };

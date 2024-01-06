@@ -5,15 +5,13 @@
 using namespace Primitives;
 using namespace ObjectTypes;
 
-Object* PrimitiveObjectFactory::createObject(PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute) {
+Object* PrimitiveObjectFactory::createObject(PrimitiveObjectType::Type objectType, ObjectAttributes::Common* attributes) {
 	// TODO: implementacja obiektów prymitywnych
 	switch (objectType) {
 		case PrimitiveObjectType::CUBE:
-			return new Cube(new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), objectBasicAttribute.position, objectBasicAttribute.scale);
-			//return new Cube(objectBasicAttribute.position, objectBasicAttribute.scale);
+			return new Cube(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
 		case PrimitiveObjectType::PLANE:
-			return new Plane(new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), objectBasicAttribute.position, objectBasicAttribute.scale);
-			//return new Plane(objectBasicAttribute.position, objectBasicAttribute.scale);
+			return new Plane(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
 		case PrimitiveObjectType::SPHERE:
 			return nullptr;
 		case PrimitiveObjectType::CIRCLE:
