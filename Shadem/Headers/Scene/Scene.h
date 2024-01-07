@@ -17,7 +17,7 @@
 #define SCREEN_HEIGHT 1080
 
 class Scene {
-
+protected:
 	// TODO: pointery wszystkie do zamiany bêd¹ na smart pointery
 	std::vector<Object*> objects{};
 	Camera::Camera* camera = nullptr;
@@ -30,11 +30,12 @@ class Scene {
 public:
 	Scene();
 
-	int configure();
-	void initBasicObjects();
+	virtual int configure() = 0;
+	virtual void initBasicObjects() = 0;
 
-	int draw(Shader& shader);
+	int draw();
 	bool addObject(Object* object);
+	int getNumberOfObjects();
 
 	bool createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);
 	bool createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectBasicAttribute);

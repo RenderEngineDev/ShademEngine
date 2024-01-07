@@ -65,7 +65,7 @@ void Mesh::setupMeshWithouIndices()
 	glBindVertexArray(0);
 }
 
-//void Mesh::Draw(Shader& shader)
+//void Mesh::draw()
 void Mesh::Draw()
 {
 	//shader.use();

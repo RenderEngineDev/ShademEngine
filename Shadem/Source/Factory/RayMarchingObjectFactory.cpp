@@ -1,5 +1,6 @@
 #pragma once
 #include "Factory/RayMarchingObjectFactory.h"
+#include "Objects/Primitives.h"
 
 using namespace ObjectTypes;
 
@@ -7,7 +8,7 @@ Object* RayMarchingObjectFactory::createObject(RayMarchingObjectType::Type objec
 	// TODO:
 	switch (objectType) {
 		case ObjectTypes::RayMarchingObjectType::SPHERE:
-			return nullptr;
+			return new Primitives::RMSphere(objectBasicAttribute.position, objectBasicAttribute.scale, Shaders::getRmSphereFragmentShaderPath());
 		case ObjectTypes::RayMarchingObjectType::CUBE:
 			return nullptr;
 		default:

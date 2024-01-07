@@ -6,15 +6,28 @@
 // ---------------------------------------------------------------------------------------------------------
 
 // camera
+bool Controller::Controller::isCursorHidden = false;
+bool Controller::Controller::firstMouse = true;
 float Controller::Controller::lastX = SCREEN_WIDTH / 2.0f;
 float Controller::Controller::lastY = SCREEN_HEIGHT / 2.0f;
-bool Controller::Controller::firstMouse = true;
 
 Camera::Camera* Controller::Controller::camera = nullptr;
 
 Controller::Controller::Controller(Camera::Camera* camera) {
 	Controller::camera = camera;
 };
+
+bool Controller::Controller::setCamera(Camera::Camera* camera) {
+	if (camera) {
+		/*Controller::Controller::isCursorHidden = false;
+		Controller::Controller::firstMouse = true;
+		Controller::Controller::lastX = SCREEN_WIDTH / 2.0f;
+		Controller::Controller::lastY = SCREEN_HEIGHT / 2.0f;*/
+		Controller::camera = camera;
+		return true;
+	} 
+	return false;
+}
 
 int Controller::Controller::configure(GLFWwindow* window) {
 	glfwMakeContextCurrent(window);
@@ -37,6 +50,31 @@ void Controller::Controller::processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	cursorVisibilityChange(window);
+	processKeyboardKeys(window, deltaTime);
+}
+
+void Controller::Controller::cursorVisibilityChange(GLFWwindow* window) {
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && isCursorHidden) {
+		isCursorHidden = false;
+
+		if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+		else {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE) {
+		isCursorHidden = true;
+	}
+}
+
+void Controller::Controller::processKeyboardKeys(GLFWwindow* window, float deltaTime) {
+	if (!camera) {
+		return;
+	}
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		camera->ProcessKeyboard(Camera::FORWARD, deltaTime);
 	}
@@ -55,25 +93,8 @@ void Controller::Controller::processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 		camera->ProcessKeyboard(Camera::DOWN, deltaTime);
 	}
-
-	// SHOW / HIDE MOUSE CURSOR
-	/*if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && ctrlState.x) {
-
-		if (ctrlState.y) {
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			ctrlState.y = false;
-		}
-		else {
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			ctrlState.y = true;
-		}
-
-		ctrlState.x = false;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE) {
-		ctrlState.x = true;
-	}*/
 }
+
 
 void Controller::Controller::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
@@ -93,12 +114,16 @@ void Controller::Controller::mouse_callback(GLFWwindow* window, double xposIn, d
 	lastX = xpos;
 	lastY = ypos;
 
-	camera->ProcessMouseMovement(xoffset, yoffset);
+	if (camera && (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED || glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)) { // IF CURSOR IS HIDE
+		camera->ProcessMouseMovement(xoffset, yoffset);
+	}
 }
 
 void Controller::Controller::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera->ProcessMouseScroll(static_cast<float>(yoffset));
+	if (camera && glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) { // IF CURSOR IS HIDE
+		camera->ProcessMouseScroll(static_cast<float>(yoffset));
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

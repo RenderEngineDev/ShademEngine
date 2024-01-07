@@ -17,16 +17,24 @@ namespace Controller {
 	class Controller {
 	public:
 
+		// key states
+		static bool isCursorHidden;
+
 		// camera
+		static bool firstMouse;
 		static float lastX;
 		static float lastY;
-		static bool firstMouse;
 
 		static Camera::Camera* camera;
 
 		Controller(Camera::Camera* camera);
+		Controller() {};
 
 		int configure(GLFWwindow* window);
+		bool Controller::Controller::setCamera(Camera::Camera* camera);
+
+		static void processKeyboardKeys(GLFWwindow* window, float deltaTime);
+		static void cursorVisibilityChange(GLFWwindow* window);
 
 		static void processInput(GLFWwindow* window);
 		static void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);

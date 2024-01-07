@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Camera/Camera.h"
 
 class RMObject : public Object {
 
@@ -26,6 +27,7 @@ private:
 
 public:
 	RMObject(glm::vec3 position, glm::vec3 scale, const char* fShaderPath);
+	virtual void draw(Camera::Camera& camera) = 0;
 	~RMObject() {
 	}
 

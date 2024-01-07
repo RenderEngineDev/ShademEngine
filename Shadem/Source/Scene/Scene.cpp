@@ -2,32 +2,23 @@
 
 #include "Scene/Scene.h"
 
-
 Scene::Scene() {
-	configure();
 };
 
 int Scene::configure() {
-	camera = new Camera::Camera(glm::vec3(0.0f, 1.0f, -10.0f));
+	camera = new Camera::Camera(glm::vec3(0.0f, 5.0f, -25.0f));
 	return 1;
 }
 
-void Scene::initBasicObjects() {
-	createObject(ObjectTypes::PrimitiveObjectType::CUBE, ObjectBasicAttributes(glm::vec3(0.0f, 0.0f, 35.0f), glm::vec3(2.0f)));
-	createObject(ObjectTypes::PrimitiveObjectType::PLANE, ObjectBasicAttributes(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f)));
-	//McObject mcObject(MarchingCubeGenerator::StructureType::RANDOM, 50, 0.6f, glm::vec3(15.0f, 0.0f, 45.0f), 65);
-	//createObject(ObjectTypes::CubeMarchingObjectType::SPHERE, ObjectBasicAttributes(glm::vec3(0.0f, -15.0f, 35.0f), glm::vec3(5.0f), glm::vec3(0.0f), 10.0f));
+void Scene::initBasicObjects() {}
+
+int Scene::getNumberOfObjects() { 
+	return objects.size();
 }
 
-int Scene::draw(Shader& shader) {
-
-	// FIXME: shader, projection, view <- TYMCZASOWO do przeniesienia do renderera !!!
-	shader.use();
-	glm::mat4 projection = glm::perspective(glm::radians(camera->zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 250.0f);
-	glm::mat4 view = camera->GetViewMatrix();
-
+int Scene::draw() {
 	for (Object* object : objects) {
-		object->Draw(shader, projection, view);
+		object->draw(*camera);
 	}
 	return 1;
 }
@@ -70,5 +61,14 @@ Camera::Camera* Scene::getCamera() {
 }
 
 Scene::~Scene() {
+
+	for (auto object : objects) {
+		delete object;
+	}
+	delete primitiveFactory;
+	delete cubeMarchingFactory;
+	delete rayMarchingFactory;
+	delete complexFactory;
+	delete lightFactory;
 	delete camera;
 }
