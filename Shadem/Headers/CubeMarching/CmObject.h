@@ -2,6 +2,7 @@
 #include "Objects/Object.h"
 #include "Generator.h"
 #include "MarchingCube.h"
+#include "Camera/Camera.h"
 
 
 class CmObject : public Object {
@@ -13,18 +14,21 @@ public:
 	MarchingCubeGenerator::StructureType structureType;
 	glm::vec3 position;
 
-	CmObject(MarchingCubeGenerator::StructureType structureType, int sizeOfGrid, float isoValue, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), float radius = 1) : structureType(structureType), sizeOfGrid(sizeOfGrid), position(position), radius(radius), isoValue(isoValue) {
+	CmObject(MarchingCubeGenerator::StructureType structureType, int sizeOfGrid, float isoValue, Shader *shader, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), float radius = 1) : structureType(structureType), sizeOfGrid(sizeOfGrid), position(position), radius(radius), isoValue(isoValue) {
+		this->shader = shader;
 		setupMesh();
 	}
 
-	void Draw(Shader& shader, glm::mat4& projection, glm::mat4& view) override {
+	void draw(Camera::Camera &camera) override {
+		this->shader->use();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(1.0f));
 		model = glm::scale(model, glm::vec3(80.0f));
-		shader.use();
-		shader.setMat4("projection", projection);
-		shader.setMat4("view", view);
-		shader.setMat4("model", model);
+		//model = glm::translate(model, position);
+		//model = glm::scale(model, scale);
+		this->shader->setMat4("projection", camera.getProjection());
+		this->shader->setMat4("view", camera.getView());
+		this->shader->setMat4("model", model);
 		this->mesh->DrawWithoutIndices();
 	}
 

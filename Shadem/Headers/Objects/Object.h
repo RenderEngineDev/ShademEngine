@@ -2,6 +2,7 @@
 
 #include "Objects/Mesh.h"
 #include "Shader/Shader.h"
+#include "Camera/Camera.h"
 
 
 struct ObjectBasicAttributes {
@@ -44,7 +45,7 @@ private:
 public:
 	Object() {};
 	Object(glm::vec3 position, glm::vec3 scale);
-	virtual void Draw(Shader& shader, glm::mat4 &projection, glm::mat4 &view) = 0;
+	virtual void draw(Camera::Camera &camera) = 0;
 	~Object() {
 		delete mesh;
 		delete shader;

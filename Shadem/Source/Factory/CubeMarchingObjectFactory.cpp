@@ -13,9 +13,9 @@ Object* CubeMarchingObjectFactory::createObject(CubeMarchingObjectType::Type obj
 			// TODO:
 			return nullptr;
 		case ObjectTypes::CubeMarchingObjectType::SPHERE:
-			return new CmObject(MarchingCubeGenerator::StructureType::SPHERE, 80, 1.0f, attributes.position, attributes.radius);
+			return new CmObject(MarchingCubeGenerator::StructureType::SPHERE, 80, 1.0f, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), attributes.position, attributes.radius);
 		case ObjectTypes::CubeMarchingObjectType::RANDOM:
-			return new CmObject(MarchingCubeGenerator::StructureType::RANDOM, 50, 0.6f, attributes.position, attributes.radius);
+			return new CmObject(MarchingCubeGenerator::StructureType::RANDOM, 50, 0.6f, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()), attributes.position, attributes.radius);
 		default:
 			return nullptr;
 	}

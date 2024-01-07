@@ -10,6 +10,19 @@
 #include <glm/glm.hpp>
 #include <stb_image.h>
 
+namespace Shaders {
+	static const char* getCommonFragmentShaderPath() {
+		return "../Shadem/Shaders/BasicShader/Fshader.glsl";
+	}
+
+	static const char* getCommonVertexShaderPath() {
+		return "../Shadem/Shaders/BasicShader/Vshader.glsl";
+	}
+	static const char* getRmSphereFragmentShaderPath() {
+		return "../Shadem/Shaders/RMShaders/SphereFshader.glsl";
+	}
+}
+
 class Shader
 {
 	public: 

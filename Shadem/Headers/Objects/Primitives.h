@@ -12,16 +12,16 @@ namespace Primitives {
 
 	class Plane : public Object {
 	public:
-		Plane(glm::vec3 position, glm::vec3 scale);
-		void Draw(Shader& shader, glm::mat4& projection, glm::mat4& view) override;
+		Plane(Shader* shader, glm::vec3 position, glm::vec3 scale);
+		virtual void draw(Camera::Camera &camera) override;
 	private:
 		void setupMesh();
 	};
 
 	class Cube : public Object {
 	public:
-		Cube(glm::vec3 position, glm::vec3 scale);
-		void Draw(Shader& shader, glm::mat4& projection, glm::mat4& view) override;
+		Cube(Shader* shader, glm::vec3 position, glm::vec3 scale);
+		virtual void draw(Camera::Camera &camera) override;
 	private:
 		void setupMesh();
 	};
@@ -29,8 +29,10 @@ namespace Primitives {
 	class RMSphere : public RMObject {
 	public:
 		RMSphere(glm::vec3 position, glm::vec3 scale, const char* fShaderPath);
-		void Draw(Camera::Camera &camera);
+		virtual void draw(Camera::Camera& camera) override;
+		//virtual void draw(Camera::Camera &camera) override;
 	private:
+		//void setupMesh();
 	};
 
 }

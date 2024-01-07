@@ -40,8 +40,6 @@ public:
 	Mesh() {};
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
-	//void Draw(Shader& shader);
-	//void DrawWithoutIndices(Shader& shader);
 
 	void Draw();
 	void DrawWithoutIndices();

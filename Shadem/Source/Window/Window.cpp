@@ -11,7 +11,7 @@ int Window::configure() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	glfwWindow = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Shadem", NULL, NULL);
-	glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	if (glfwWindow == NULL)
 	{
