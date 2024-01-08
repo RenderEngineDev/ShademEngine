@@ -7,10 +7,6 @@
 #include <GLFW/glfw3.h>
 
 
-// settings
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
-
 namespace Controller {
 
 	// TODO: do zmiany dla wielu kontrolerów

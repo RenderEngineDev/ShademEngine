@@ -11,10 +11,6 @@
 #include "Scene/Level/CustomLevel.h"
 #include "Scene/Level/RmLevel.h"
 
-// settings
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
-
 // timing
 float ShademEngine::lastFrame = 0.0f;
 float ShademEngine::deltaTime = 0.0f;
@@ -35,7 +31,7 @@ int ShademEngine::run() {
 		checkAndReloadLevelSelection();
 		if (scene) { 
 			scene->getCamera()->processViewAndProjection();
-			scene->draw();
+			renderer->draw(*scene);
 		}
 
 		gui->startGuiFrame();
@@ -45,6 +41,7 @@ int ShademEngine::run() {
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window->getGLFWwindow());
 		glfwPollEvents();
+
 	}
 	glfwTerminate();
 	return 1;
@@ -75,6 +72,7 @@ bool ShademEngine::reloadScene(Scene *level) {
 		scene = level;
 		scene->initBasicObjects();
 		controller->setCamera(scene->getCamera());
+		scene->getCamera()->linkWindow(window);
 		return true;
 	}
 	return false;
@@ -84,8 +82,10 @@ int ShademEngine::configure() {
 	controller = new Controller::Controller();
 	window = new Window();
 	gui = new GUI();
-	
-	if (!window->configure()) {
+	renderer = new Renderer();
+
+	// for future, load from file config to initialize whole project
+	if (!window->configure(1920, 1080)) {
 		std::cout << "Failed to configure window" << std::endl;
 		glfwTerminate();
 		return -1;
@@ -108,7 +108,7 @@ int ShademEngine::configure() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	//glCullFace(GL_FRONT);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	return 0;

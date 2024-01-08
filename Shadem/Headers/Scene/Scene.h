@@ -13,8 +13,6 @@
 #include "Factory/RayMarchingObjectFactory.h"
 
 // TODO: do przeniesienia (z ShademEngine.cpp te¿) - do window?
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
 
 class Scene {
 protected:
@@ -33,9 +31,11 @@ public:
 	virtual int configure() = 0;
 	virtual void initBasicObjects() = 0;
 
-	int draw();
+	//int draw();
 	bool addObject(Object* object);
 	int getNumberOfObjects();
+
+	std::vector<Object*>& getObjects() { return objects; }
 
 	bool createObject(ObjectTypes::PrimitiveObjectType::Type objectType, ObjectBasicAttributes objectAttribute);
 	bool createObject(ObjectTypes::LightObjectType::Type objectType, ObjectBasicAttributes objectAttribute);

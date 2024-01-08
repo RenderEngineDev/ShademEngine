@@ -8,8 +8,8 @@
 // camera
 bool Controller::Controller::isCursorHidden = false;
 bool Controller::Controller::firstMouse = true;
-float Controller::Controller::lastX = SCREEN_WIDTH / 2.0f;
-float Controller::Controller::lastY = SCREEN_HEIGHT / 2.0f;
+float Controller::Controller::lastX = 0.0f;
+float Controller::Controller::lastY = 0.0f;
 
 Camera::Camera* Controller::Controller::camera = nullptr;
 

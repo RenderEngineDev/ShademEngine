@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
-#include <Window/Controller.h>
+#include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
 
 class Window {
 private:
@@ -9,6 +10,8 @@ private:
 public:
 	Window() {}
 
-	int configure();
+	int configure(int width, int height);
 	GLFWwindow* getGLFWwindow();
+
+	glm::vec2 getWindowSize();
 };
