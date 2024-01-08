@@ -20,7 +20,7 @@ find_library(GLFW_LIBRARIES glfw3 HINTS ${GLFW_LIBRARY_DIR})
 # Utwórz zmienną zawierającą wszystkie pliki źródłowe i nagłówkowe z katalogu "src"
 file(GLOB_RECURSE SOURCE_FILES "Shadem/Source/*.cpp")
 file(GLOB_RECURSE HEADER_FILES "Shadem/Headers/*.h")
-file(GLOB_RECURSE SHADER_FILES "Shadem/Shaders/*.glsl")
+file(GLOB_RECURSE SHADER_FILES "Shadem/Shaders/*")
 
 ########################################################################
 

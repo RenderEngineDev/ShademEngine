@@ -16,12 +16,12 @@ int Scene::getNumberOfObjects() {
 	return objects.size();
 }
 
-int Scene::draw() {
-	for (Object* object : objects) {
-		object->draw(*camera);
-	}
-	return 1;
-}
+//int Scene::draw() {
+//	for (Object* object : objects) {
+//		object->draw(*camera);
+//	}
+//	return 1;
+//}
 
 bool Scene::addObject(Object* object) {
 	if (object) {

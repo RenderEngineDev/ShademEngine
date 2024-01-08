@@ -23,6 +23,7 @@ protected:
 private:
 	
 
+	RenderType renderer = RenderType::RayMarchingRender;
 	virtual void setupMesh() override;
 
 public:

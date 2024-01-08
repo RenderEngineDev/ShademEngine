@@ -6,9 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+#include "Window/window.h"
 
 namespace Camera {
 
@@ -36,6 +34,8 @@ namespace Camera {
     private:
         glm::mat4 projection;
         glm::mat4 view;
+        glm::vec2 range = glm::vec2(0.1f, 250.0f);
+
     public:
         // camera Attributes
         glm::vec3 position;
@@ -51,6 +51,7 @@ namespace Camera {
         float mouseSensitivity;
         float zoom;
 
+        Window* window;
 
         // constructor with vectors
         Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
@@ -62,7 +63,10 @@ namespace Camera {
         glm::mat4 getViewMatrix();
 
         void processViewAndProjection() {
-            projection = glm::perspective(glm::radians(zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 250.0f);
+            glm::vec2 screenSize(16,9);
+            if (window)
+                screenSize = window->getWindowSize();
+            projection = glm::perspective(glm::radians(zoom), (float)screenSize.x / (float)screenSize.y, range.x, range.y);
             view = getViewMatrix();
         }
 
@@ -73,6 +77,10 @@ namespace Camera {
         glm::mat4& getView() {
             return view;
         }
+
+        glm::vec2& getRange() { return range; }
+
+        void linkWindow(Window* _window) { window = _window; }
 
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
         void ProcessKeyboard(CameraMovement direction, float deltaTime);

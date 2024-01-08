@@ -4,6 +4,12 @@
 #include "Shader/Shader.h"
 #include "Camera/Camera.h"
 
+enum RenderType
+{
+	StandardRender,
+	RayMarchingRender,
+	CubeMarchingRender
+};
 
 // czysto abstrakcyjna klasa, na potrzeby dynamicznego castowania (patrz np. CubeMarchingObjectFactory.cpp) - oraz do przysz³ych zmian na³o¿enia template'a na metode createObject (ujednolicenie metody)
 struct ObjectAttributes {
@@ -61,7 +67,7 @@ protected:
 
 	Shader* shader = nullptr;
 	Mesh* mesh = nullptr;
-
+	RenderType renderer = RenderType::StandardRender;
 
 private:
 	virtual void setupMesh() = 0;
@@ -74,5 +80,7 @@ public:
 		delete mesh;
 		delete shader;
 	}
+
+	RenderType& getRenderType() { return renderer; }
 
 };

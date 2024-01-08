@@ -95,11 +95,13 @@ Primitives::RMSphere::RMSphere(glm::vec3 position, glm::vec3 scale, const char* 
 
 void Primitives::RMSphere::draw(Camera::Camera& camera)
 {
+	//glDisable(GL_DEPTH_TEST);
+
 	shader.use();
 	/*
 		definicje view przeniesc do kamery, aby mogla zwrocic sama rotacje bez przesuniecia
 	*/
-	glm::mat4 view = glm::mat4{ glm::vec4(camera.right,0),
+	glm::mat4 view = glm::mat4{glm::vec4(camera.right,0),
 					 glm::vec4(camera.up,   0),
 					 glm::vec4(camera.front,0),
 					 glm::vec4(camera.right,1) };
@@ -108,6 +110,11 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 	shader.setVec3("CameraPos", camera.position);
 	shader.setVec3("SpherePos", position);
 	shader.setFloat("Zoom", camera.zoom);
+	shader.setVec2("WindowSize", camera.window->getWindowSize());
+	shader.setVec3("Scale", scale);
+	shader.setVec2("CameraRange", camera.getRange());
 
 	mesh->Draw();
+
+	//glEnable(GL_DEPTH_TEST);
 }
