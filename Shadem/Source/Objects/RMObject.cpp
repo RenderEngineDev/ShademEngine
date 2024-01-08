@@ -1,7 +1,7 @@
 #include "Objects/RMObject.h"
 
 
-RMObject::RMObject(glm::vec3 position, glm::vec3 scale, const char* fShaderPath) : Object(position, scale), shader("../Shadem/Shaders/RMShaders/Vshader.glsl", fShaderPath)
+RMObject::RMObject(glm::vec3 position, glm::vec3 scale, const char* fShaderPath) : Object(position, scale), shader("../Shadem/Shaders/RMShaders/Vshader.shader", fShaderPath)
 {
 	setupMesh();
 }

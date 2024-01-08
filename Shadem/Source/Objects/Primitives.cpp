@@ -108,6 +108,7 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 	shader.setVec3("CameraPos", camera.position);
 	shader.setVec3("SpherePos", position);
 	shader.setFloat("Zoom", camera.zoom);
+	shader.setFloat("Scale", glm::length(scale));
 
 	mesh->Draw();
 }

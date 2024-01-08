@@ -56,6 +56,7 @@ void GUI::drawMainMenu() {
 	ImGui::Begin("Shadem menu");
 	ImGui::ListBox("Levels\n(single select)", &listboxItemCurrent, levels, IM_ARRAYSIZE(levels), IM_ARRAYSIZE(levels));
 	ImGui::Checkbox("Demo Window", &showDemoWindow);
-	//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f, io.Framerate, io.Framerate);
+	ImGuiIO io = ImGui::GetIO();
+	ImGui::Text("(%.1f FPS)", io.Framerate, io.Framerate);
 	ImGui::End();
 }

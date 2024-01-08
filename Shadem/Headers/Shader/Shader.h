@@ -19,7 +19,7 @@ namespace Shaders {
 		return "../Shadem/Shaders/BasicShader/Vshader.glsl";
 	}
 	static const char* getRmSphereFragmentShaderPath() {
-		return "../Shadem/Shaders/RMShaders/SphereFshader.glsl";
+		return "../Shadem/Shaders/RMShaders/SphereFshader.shader";
 	}
 }
 
