@@ -32,15 +32,19 @@ void Random::setupMesh() {
 }
 
 std::vector<Vertex> Random::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {
-	std::vector<Vertex> vertices;
-	for (auto triangle : triangles) {
-		if (triangle.size() != 0)
-			for (auto point : triangle) {
-				Vertex vertex(glm::vec3(point.x, point.y, point.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-				vertices.push_back(vertex);
-			}
+	size_t totalSize = 0;
+	for (const auto& vec : triangles) {
+		totalSize += vec.size();
 	}
-	return vertices;
+	std::vector<Vertex> flatVector;
+	flatVector.reserve(totalSize);
+	for (const auto& vec : triangles) {
+		for (const auto& vertex : vec) {
+			flatVector.push_back(Vertex(glm::vec3(vertex.x, vertex.y, vertex.z)));
+		}
+	}
+
+	return flatVector;
 }
 
 Random::~Random() {

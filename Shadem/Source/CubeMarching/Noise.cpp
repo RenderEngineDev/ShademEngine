@@ -21,7 +21,7 @@ void Noise::draw(Camera::Camera& camera) {
 
 void Noise::update(Camera::Camera& camera) {
 	if (isUpdated()) {
-		mesh->vertices = convertTrianglesToVertices(trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, offset, scalarFunction), attributes->isoValue));
+		mesh->vertices = convertTrianglesToVertices(trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, offset, scalarFunction), attributes->isoValue));
 		mesh->setupMeshWithouIndices();
 		setUpdated(false);
 	}
@@ -33,21 +33,32 @@ void Noise::setupMesh() {
 
 	trianglesGenerator = new TrianglesGenerator(noiseGridSize);
 	gridGenerator = new GridGenerator(noiseGridSize);
-	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, offset, scalarFunction), attributes->isoValue);
+	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, offset, scalarFunction), attributes->isoValue);
 	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
 	mesh = new Mesh(vertices, std::vector<Texture>{});
 }
+//#include <chrono>
 
 std::vector<Vertex> Noise::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {
-	std::vector<Vertex> vertices;
-	for (auto triangle : triangles) {
-		if (triangle.size() != 0)
-			for (auto point : triangle) {
-				Vertex vertex(glm::vec3(point.x, point.y, point.z), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-				vertices.push_back(vertex);
-			}
+	//auto start = std::chrono::steady_clock::now();
+
+	size_t totalSize = 0;
+	for (const auto& vec : triangles) {
+		totalSize += vec.size();
 	}
-	return vertices;
+	std::vector<Vertex> flatVector;
+	flatVector.reserve(totalSize);
+	for (const auto& vec : triangles) {
+		for (const auto& vertex : vec) {
+			flatVector.emplace_back(Vertex(glm::vec3(vertex.x, vertex.y, vertex.z)));
+		}
+	}
+	//for (const auto& vec : triangles) {
+		//flatVector.insert(flatVector.end(), vec.begin(), vec.end());
+	//}
+
+	//std::cout << "Elapsed(ms)= flat " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count() << std::endl;
+	return flatVector;
 }
 
 Noise::~Noise() {

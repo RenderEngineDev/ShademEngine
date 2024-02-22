@@ -33,15 +33,18 @@ void Sphere::setupMesh() {
 }
 
 std::vector<Vertex> Sphere::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {
-	std::vector<Vertex> vertices;
-	for (auto triangle : triangles) {
-		if (triangle.size() != 0)
-			for (auto point : triangle) {
-				Vertex vertex(transformToSphereSurface(glm::vec3(point.x, point.y, point.z), false), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-				vertices.push_back(vertex);
-			}
+	size_t totalSize = 0;
+	for (const auto& vec : triangles) {
+		totalSize += vec.size();
 	}
-	return vertices;
+	std::vector<Vertex> flatVector;
+	flatVector.reserve(totalSize);
+	for (const auto& vec : triangles) {
+		for (const auto& vertex : vec) {
+			flatVector.push_back(Vertex(transformToSphereSurface(glm::vec3(vertex.x, vertex.y, vertex.z), false)));
+		}
+	}
+	return flatVector;
 }
 
 glm::vec3 Sphere::transformToSphereSurface(glm::vec3& point, const bool& smoothing) {

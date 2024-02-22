@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include "CubeMarching/TrianglesGenerator.h"
-//#include <chrono>
+#include <chrono>
 
 #include <omp.h>
 
@@ -107,19 +107,18 @@ std::vector<std::vector<Point>> TrianglesGenerator::triangulate_cell(GridCell &c
 /// </summary>
 /// <returns></returns>
 std::vector<std::vector<Point>> TrianglesGenerator::triangulate_field(std::vector<std::vector<std::vector<float>>>& scalarFunction, const float &isovalue) {
-    //auto start = std::chrono::steady_clock::now();
+    auto start = std::chrono::steady_clock::now();
     int i, j, k;
     float offsetX = 1.0f / gridSize.x, offsetY = 1.0f / gridSize.y, offsetZ = 1.0f / gridSize.z;
     std::vector<std::vector<Point>> triangles;
     glm::ivec3 igridSize = gridSize;
-    triangles.resize(igridSize.x * igridSize.y * igridSize.z * 5);
+    triangles.resize(igridSize.x * igridSize.y * igridSize.z * 4);
 
     #pragma omp parallel for private(i, j, k) collapse(3)
     for (i = 0; i < igridSize.x - 1; i++) {
         for (j = 0; j < igridSize.y - 1; j++) {
             for (k = 0; k < igridSize.z - 1; k++) {
                 float x = i / gridSize.z - 0.5f, y = j / gridSize.y - 0.5f, z = k / gridSize.z - 0.5f;
-                //float x = i, y = j, z = k;
                 // cell ordered according to convention in referenced website
                 GridCell cell = {
                     {
@@ -139,7 +138,7 @@ std::vector<std::vector<Point>> TrianglesGenerator::triangulate_field(std::vecto
                 if (cubeIndex != 0 && cubeIndex != 255) {
                     std::vector<std::vector<Point>> cellTriangles = triangulate_cell(cell, isovalue);
                     // nie powinno byæ wiêcej ni¿ 5 elementów w wektorze wektora cell triangles (mo¿e byæ wiêcej przy bardzo gêstych siatkach 350+, ale chyba wprowadzimy limit)
-                    int index = (i * igridSize.x * igridSize.y + j * igridSize.z + k) * 5;
+                    int index = (i * igridSize.x * igridSize.y + j * igridSize.z + k) * 4;
                     //#pragma omp critical
                     for (int i = 0; i < (int)cellTriangles.size(); i++) {
                         triangles[index + i] = cellTriangles[i];
@@ -149,6 +148,14 @@ std::vector<std::vector<Point>> TrianglesGenerator::triangulate_field(std::vecto
             }
         }
     }
-    //std::cout << "Elapsed(ms)=" << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count() << std::endl;
+
+    //auto start2 = std::chrono::steady_clock::now();
+   /* triangles.erase(std::remove_if(triangles.begin(), triangles.end(),
+        [](const std::vector<Point>& innerVec) {
+            return innerVec.empty();
+        }),
+        triangles.end());*/
+    //std::cout << "Elapsed(ms)= triangles usuwanie " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start2).count() << std::endl;
+    std::cout << "Elapsed(ms)= triangles " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count() << std::endl;
     return triangles;
 }

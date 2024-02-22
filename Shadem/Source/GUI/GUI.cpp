@@ -72,7 +72,7 @@ void GUI::drawObjectListWindow(Scene* scene) {
 // Dodatkowa funkcja do obs³ugi wyboru obiektu
 template <class T>
 void GUI::handleObjectSelection(T* selectedObject) {
-	ImGui::BeginChild((char*)(&selectedObject->getAttributes()->name), ImVec2(300, 200), 1, 1);
+	ImGui::BeginChild((char*)(&selectedObject->getAttributes()->name), ImVec2(350, 200), 1, 1);
 	ImGui::InputFloat3("Position", &selectedObject->getAttributes()->position.x);
 	ImGui::InputFloat3("Scale", &selectedObject->getAttributes()->scale.x);
 	ImGui::InputFloat3("Rotation", &selectedObject->getAttributes()->rotation.x);
@@ -97,6 +97,7 @@ void GUI::handleOtherAttributesSelection(CubeMarching::Noise* noise) {
 	if (ImGui::InputFloat("Amplitude", &attributes->amplitude, 0.1f, 1.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Lacunarity", &attributes->lacunarity, 0.1f, 1.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Persistence", &attributes->persistence, 0.1f, 1.0f)) { noise->setUpdated(true); }
+	if (ImGui::InputFloat("Noise step scale", &attributes->noiseScale, 0.05f, 0.5f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Offset X", &noise->getOffset().x, 5.0f, 10.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Offset Y", &noise->getOffset().y, 5.0f, 10.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Offset Z", &noise->getOffset().z, 5.0f, 10.0f)) { noise->setUpdated(true); }

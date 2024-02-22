@@ -34,12 +34,13 @@ namespace ObjectAttributes {
 		float amplitude;
 		float lacunarity;
 		float persistence;
+		float noiseScale = 1.0f;
 
 		glm::vec3 gridSize = glm::vec3(20.0f);
 
 		virtual void makeMePolymorphic() override { };
 		// TODO: porz¹dek z konstruktorami, ale po ogarniêciu innych atrybutów
-		CubeMarching(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, glm::vec3 gridSize, float isoValue, float frequency = 1.0f, float amplitude = 1.0f, float lacunarity = 2.0f, float persistence = 1 / 2.0f, std::string name = "CubeMarching") : gridSize(gridSize), isoValue(isoValue), frequency(frequency), amplitude(amplitude), lacunarity(lacunarity), persistence(persistence), Common(position, scale, rotation, name) {};
+		CubeMarching(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, glm::vec3 gridSize, float isoValue, float noiseScale, float frequency = 1.0f, float amplitude = 1.0f, float lacunarity = 2.0f, float persistence = 1 / 2.0f, std::string name = "CubeMarching") : gridSize(gridSize), isoValue(isoValue), noiseScale(noiseScale), frequency(frequency), amplitude(amplitude), lacunarity(lacunarity), persistence(persistence), Common(position, scale, rotation, name) {};
 		CubeMarching(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, glm::vec3 gridSize, float isoValue = 1.0f, float radius = 1.0f, std::string name = "CubeMarching") : gridSize(gridSize), isoValue(isoValue), radius(radius), Common(position, scale, rotation, name) {};
 		CubeMarching(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, std::string name = "CubeMarching") : Common(position, scale, rotation, name) {};
 	};	
