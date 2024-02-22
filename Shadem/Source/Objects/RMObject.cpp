@@ -3,7 +3,7 @@
 
 RMObject::RMObject(ObjectAttributes::Common* attributes) : Object(attributes)
 {
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/plane.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/plane.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 

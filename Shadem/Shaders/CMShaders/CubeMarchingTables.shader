@@ -1,30 +1,17 @@
-/*
-    Tables and conventions from
-    http://paulbourke.net/geometry/polygonise/
-*/
-#pragma once
-
-#include <utility>
-#include <vector>
-
-#include <functional>
-
-#include "CubeMarching/Types.h"
-#include "Shader/Shader.h"
-#include "Objects/Mesh.h"
-
+#ifndef CUBE_MARCHING_TABLES_SHADER
+#define CUBE_MARCHING_TABLES_SHADER
 
 /// edgeToVertices[i] = {a, b} => edge i joins vertices a and b
-static const std::vector<std::pair<int, int>> edgeToVertices =
+const ivec2[12] edgeToVertices =
 {
-    {0, 1}, {1, 2}, {2, 3}, {0, 3},
-    {4, 5}, {5, 6}, {6, 7}, {4, 7},
-    {0, 4}, {1, 5}, {2, 6}, {3, 7}
+    ivec2(0, 1), ivec2(1, 2), ivec2(2, 3), ivec2(0, 3),
+    ivec2(4, 5), ivec2(5, 6), ivec2(6, 7), ivec2(4, 7),
+    ivec2(0, 4), ivec2(1, 5), ivec2(2, 6), ivec2(3, 7)
 };
 
 /// edgeTable[i] is a 12 bit number; i is a cubeIndex
 /// edgeTable[i][j] = 1 if isosurface intersects edge j for cubeIndex i
-static constexpr int edgeTable[256] =
+const int edgeTable[256] =
 {
     0x000, 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c, 0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
     0x190, 0x099, 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c, 0x99c, 0x895, 0xb9f, 0xa96, 0xd9a, 0xc93, 0xf99, 0xe90,
@@ -45,7 +32,7 @@ static constexpr int edgeTable[256] =
 };
 
 /// triangleTable[i] is a list of edges forming triangles for cubeIndex i
-static constexpr int triangleTable[256][16] =
+const int triangleTable[256][16] =
 {
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -305,47 +292,4 @@ static constexpr int triangleTable[256][16] =
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
 };
 
-class TrianglesGenerator
-{
-private:
-    glm::vec3 gridSize;
-
-private:
-
-public:
-    std::vector<std::vector<Point>> triangles;
-
-    TrianglesGenerator(glm::vec3 gridSize = glm::vec3(50)) : gridSize(gridSize) {
-    };
-
-    ~TrianglesGenerator() {
-    }
-
-    /**
-     * Given a `cell`, calculate its cube index
-     * The cube index is an 8-bit encoding. Each bit represents a vertex. `index[i]` is the ith bit
-     * If the value at the ith vertex is < isovalue, `index[i]` = 1. Else, `index[i]` = 0
-     */
-    int calculate_cube_index(const GridCell& cell, const float& isovalue);
-
-    /// Find the point between `v1` and `v2` where the functional value = `isovalue`
-    Point interpolate(const Point& v1, const float& val1, const Point& v2, const float& val2, const float& isovalue);
-
-    /// Returns all intersection coordinates of a cell with the isosurface
-    /// (Calls `interpolate()`)
-    std::vector<Point> get_intersection_coordinates(const GridCell& cell, const float &isovalue);
-
-
-    /// Given `cubeIndex`, get the edge table entry and using `intersections`, make all triangles
-    std::vector<std::vector<Point>> get_triangles(const std::vector<Point> &intersections, const int &cubeIndex);
-
-    /// Utility function to print a triangle
-    void print_triangles(std::vector<std::vector<Point>> triangles);
-
-    /// Get triangles of a single cell
-    std::vector<std::vector<Point>> triangulate_cell(const GridCell& cell, const float& isovalue);
-
-    /// Triangulate a scalar field represented by `scalarFunction`. `isovalue` should be used for isovalue computation
-    void triangulate_field(const std::vector<std::vector<std::vector<float>>>& scalarFunction, const float& isovalue);
-
-};
+#endif

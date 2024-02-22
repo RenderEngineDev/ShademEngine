@@ -31,7 +31,8 @@ private:
 
 public:
 
-	static std::pair<const std::string, std::shared_ptr<Shader>>& createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+	//static std::pair<const std::string, std::shared_ptr<Shader>>& createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+	static std::pair<const std::string, std::shared_ptr<Shader>>& createOrGetShader(std::initializer_list<const std::string> shaderFilePaths);
 	static std::pair<const std::string, std::shared_ptr<std::vector<Mesh*>>>& createOrGetMesh(const std::string& meshFilePath);
 	static std::shared_ptr<Texture>& createOrGetTexture(const std::string& textureFilePath);
 

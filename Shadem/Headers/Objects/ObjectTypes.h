@@ -49,7 +49,11 @@ namespace ObjectTypes {
             PLANE,
             SPHERE,
             RANDOM,
-            NOISE
+            NOISE_2D,
+            NOISE_3D,
+            NOISE_2D_GEOMETRY,
+            NOISE_3D_GEOMETRY,
+            NOISE_3D_COMPUTE,
             // ... 
         };
 
