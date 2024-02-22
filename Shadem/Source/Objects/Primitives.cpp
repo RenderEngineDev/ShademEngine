@@ -1,11 +1,11 @@
 #include "Objects/Primitives.h"
 
 Primitives::Plane::Plane(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes) {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/plane.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/plane.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 
@@ -34,11 +34,11 @@ void Primitives::Plane::update(Camera::Camera& camera) {
 }
 
 Primitives::Cube::Cube(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes) {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/cube.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/cube.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 
@@ -88,7 +88,7 @@ void Primitives::Cube::update(Camera::Camera& camera) {
 
 Primitives::RMSphere::RMSphere(ObjectAttributes::Sphereous* attributes, const std::string& fragFilePath) : RMObject(attributes)
 {
-	auto shaderPair = ResourceManager::createOrGetShader(Shaders::getRmVertexShaderPath(), fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({Shaders::getRmVertexShaderPath(), fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 }
@@ -115,11 +115,11 @@ void Primitives::RMSphere::update(Camera::Camera& camera) {
 
 Primitives::Cone::Cone(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
 {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/cone.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/cone.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 }
@@ -134,11 +134,11 @@ void Primitives::Cone::setupMesh()
 
 Primitives::Torus::Torus(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
 {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/torus.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/torus.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 }
@@ -153,11 +153,11 @@ void Primitives::Torus::setupMesh()
 
 Primitives::Cylinder::Cylinder(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
 {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/cylinder.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/cylinder.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 }
@@ -172,11 +172,11 @@ void Primitives::Cylinder::setupMesh()
 
 Primitives::Sphere::Sphere(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
 {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/sphere.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/sphere.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 }
@@ -189,13 +189,14 @@ void Primitives::Sphere::setupMesh()
 {
 }
 
+// TODO: Circle object should gen vertex buffer for lines and draw gl_lines
 Primitives::Circle::Circle(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
 {
-	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/circle.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/circle.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 }

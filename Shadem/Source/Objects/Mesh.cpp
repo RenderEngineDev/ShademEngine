@@ -155,6 +155,31 @@ void Mesh::DrawWithoutIndices(std::shared_ptr<Shader>& shader)
 	glBindVertexArray(0);
 }
 
+//void Mesh::DrawWithoutIndices(Shader& shader)
+void Mesh::DrawRectangleForComputeShader()
+{
+	//// draw mesh
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
+	//glDrawArrays(GL_TRIANGLES, 0, (int)vertices.size());
+}
+
+//void Mesh::DrawWithoutIndices(Shader& shader)
+void Mesh::DrawPatches()
+{
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_PATCHES, 0, (int)vertices.size());
+	glBindVertexArray(0);
+}
+
+void Mesh::DrawGeoPointsCM()
+{
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_POINTS, 0, (int)vertices.size());
+	glBindVertexArray(0);
+}
+
 unsigned int Mesh::getVAO() const {
 	return VAO;
 }

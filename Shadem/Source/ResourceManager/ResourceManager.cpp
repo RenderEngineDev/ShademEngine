@@ -1,5 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 
+#include <initializer_list>
 #include "ResourceManager/ResourceManager.h"
 
 
@@ -7,17 +8,22 @@ std::unordered_map<std::string, std::shared_ptr<Shader>> ResourceManager::mapOfS
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourceManager::mapOfTextures = std::unordered_map<std::string, std::shared_ptr<Texture>>();
 std::unordered_map<std::string, std::shared_ptr<std::vector<Mesh*>>> ResourceManager::mapOfMeshes = std::unordered_map<std::string, std::shared_ptr<std::vector<Mesh*>>>();
 
-
 /* returns pair of key and shader, creates one if doesn't exists under given key */
-std::pair<const std::string, std::shared_ptr<Shader>>& ResourceManager::createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath)
+std::pair<const std::string, std::shared_ptr<Shader>>& ResourceManager::createOrGetShader(std::initializer_list<const std::string> shaderFilePaths)
 {
-	auto mapElement = mapOfShaders.find(vertexShaderFilePath + "|" + fragmentShaderFilePath);
-
-	if (mapElement == mapOfShaders.end()) {
-        mapOfShaders[vertexShaderFilePath + "|" + fragmentShaderFilePath] = std::make_shared<Shader>(vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
-        mapElement = mapOfShaders.find(vertexShaderFilePath + "|" + fragmentShaderFilePath);
+    std::string key;
+    for (auto path = shaderFilePaths.begin(); path != shaderFilePaths.end(); path++) {
+        key += path->c_str() + std::string("|");
     }
-	return *mapElement;
+    key.pop_back(); // Remove the last '|'
+
+    auto mapElement = mapOfShaders.find(key);
+
+    if (mapElement == mapOfShaders.end()) {
+        mapOfShaders[key] = std::make_shared<Shader>(shaderFilePaths);
+        mapElement = mapOfShaders.find(key);
+    }
+    return *mapElement;
 }
 
 /* returns pair of key and model, creates one if doesn't exists under given key */

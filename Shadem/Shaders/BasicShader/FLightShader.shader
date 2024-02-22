@@ -1,9 +1,10 @@
 #version 460 core
 
 out vec4 FragColor;
-in vec3 FragPos;
 
-in vec2 TexCoord;
+in vec3 FragPos;
+in vec2 TexCoords;
+in vec3 Normal;
 
 uniform int TextureQuantity;
 uniform sampler2D Texture;
@@ -15,10 +16,10 @@ void main()
 
     if( TextureQuantity > 0 )
     {
-        FragColor = texture(Texture, TexCoord);
+        FragColor = texture(Texture, TexCoords);
     }
     else
     {
-        FragColor = vec4(FragPos,1.0); // set alle 4 vector values to 1.0
+        FragColor = vec4(vec3(1.0f), 1.0); // set alle 4 vector values to 1.0
     }
 }

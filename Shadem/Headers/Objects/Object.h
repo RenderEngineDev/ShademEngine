@@ -66,4 +66,6 @@ public:
 	void setMeshResourceKey(const std::string& key) { meshResourceKey = key; }
 	void setShaderResourceKey(const std::string& key) { shaderResourceKey = key; }
 
+protected:
+	void evaluateBasicModelTransformations(glm::mat4& model);
 };

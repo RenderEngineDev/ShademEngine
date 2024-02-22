@@ -72,13 +72,15 @@ void GUI::drawObjectListWindow(Scene* scene) {
 // Dodatkowa funkcja do obs≥ugi wyboru obiektu
 template <class T>
 void GUI::handleObjectSelection(T* selectedObject) {
-	ImGui::BeginChild((char*)(&selectedObject->getAttributes()->name), ImVec2(300, 200), 1, 1);
+	ImGui::BeginChild((char*)(&selectedObject->getAttributes()->name), ImVec2(350, 200), 1, 1);
 	ImGui::InputFloat3("Position", &selectedObject->getAttributes()->position.x);
 	ImGui::InputFloat3("Scale", &selectedObject->getAttributes()->scale.x);
 	ImGui::InputFloat3("Rotation", &selectedObject->getAttributes()->rotation.x);
 	
 	// Sprawdü typ obiektu i wykonaj dynamiczne rzutowanie
-	if (typeid(*selectedObject) == typeid(CubeMarching::Noise)) {
+	if (typeid(*selectedObject) == typeid(CubeMarching::Noise2D) || 
+		typeid(*selectedObject) == typeid(CubeMarching::Noise3D) || 
+		typeid(*selectedObject) == typeid(CubeMarching::NoiseGeometry)) {
 		handleOtherAttributesSelection(dynamic_cast<CubeMarching::Noise*>(selectedObject));
 	}
 	else if (typeid(*selectedObject) == typeid(CubeMarching::Sphere)) {
@@ -93,13 +95,15 @@ void GUI::handleObjectSelection(T* selectedObject) {
 void GUI::handleOtherAttributesSelection(CubeMarching::Noise* noise) {
 	auto attributes = noise->getAttributes();
 	if (ImGui::SliderFloat("Iso value", &attributes->isoValue, -1.0f, 1.0f)) { noise->setUpdated(true); }
+	if (ImGui::InputFloat3("GridSize", &attributes->gridSize.x)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Frequency", &attributes->frequency, 0.1f, 1.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Amplitude", &attributes->amplitude, 0.1f, 1.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Lacunarity", &attributes->lacunarity, 0.1f, 1.0f)) { noise->setUpdated(true); }
 	if (ImGui::InputFloat("Persistence", &attributes->persistence, 0.1f, 1.0f)) { noise->setUpdated(true); }
-	if (ImGui::InputFloat("Offset X", &noise->getOffset().x, 5.0f, 10.0f)) { noise->setUpdated(true); }
-	if (ImGui::InputFloat("Offset Y", &noise->getOffset().y, 5.0f, 10.0f)) { noise->setUpdated(true); }
-	if (ImGui::InputFloat("Offset Z", &noise->getOffset().z, 5.0f, 10.0f)) { noise->setUpdated(true); }
+	if (ImGui::InputFloat("Noise step scale", &attributes->noiseScale, 0.05f, 0.5f)) { noise->setUpdated(true); }
+	if (ImGui::InputFloat("Offset X", &attributes->offset.x, 5.0f, 10.0f)) { noise->setUpdated(true); }
+	if (ImGui::InputFloat("Offset Y", &attributes->offset.y, 5.0f, 10.0f)) { noise->setUpdated(true); }
+	if (ImGui::InputFloat("Offset Z", &attributes->offset.z, 5.0f, 10.0f)) { noise->setUpdated(true); }
 }
 
 void GUI::handleOtherAttributesSelection(CubeMarching::Sphere* sphere) {
