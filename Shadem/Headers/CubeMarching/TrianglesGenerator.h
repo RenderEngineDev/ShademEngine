@@ -313,6 +313,7 @@ private:
 private:
 
 public:
+    std::vector<std::vector<Point>> triangles;
 
     TrianglesGenerator(glm::vec3 gridSize = glm::vec3(50)) : gridSize(gridSize) {
     };
@@ -325,26 +326,26 @@ public:
      * The cube index is an 8-bit encoding. Each bit represents a vertex. `index[i]` is the ith bit
      * If the value at the ith vertex is < isovalue, `index[i]` = 1. Else, `index[i]` = 0
      */
-    int calculate_cube_index(GridCell& cell, float isovalue);
+    int calculate_cube_index(const GridCell& cell, const float& isovalue);
 
     /// Find the point between `v1` and `v2` where the functional value = `isovalue`
-    Point interpolate(Point& v1, float val1, Point& v2, float val2, float isovalue);
+    Point interpolate(const Point& v1, const float& val1, const Point& v2, const float& val2, const float& isovalue);
 
     /// Returns all intersection coordinates of a cell with the isosurface
     /// (Calls `interpolate()`)
-    std::vector<Point> get_intersection_coordinates(GridCell& cell, float isovalue);
+    std::vector<Point> get_intersection_coordinates(const GridCell& cell, const float &isovalue);
 
 
     /// Given `cubeIndex`, get the edge table entry and using `intersections`, make all triangles
-    std::vector<std::vector<Point>> get_triangles(std::vector<Point>& intersections, int cubeIndex);
+    std::vector<std::vector<Point>> get_triangles(const std::vector<Point> &intersections, const int &cubeIndex);
 
     /// Utility function to print a triangle
     void print_triangles(std::vector<std::vector<Point>> triangles);
 
     /// Get triangles of a single cell
-    std::vector<std::vector<Point>> triangulate_cell(GridCell& cell, const float& isovalue);
+    std::vector<std::vector<Point>> triangulate_cell(const GridCell& cell, const float& isovalue);
 
     /// Triangulate a scalar field represented by `scalarFunction`. `isovalue` should be used for isovalue computation
-    std::vector<std::vector<Point>> triangulate_field(std::vector<std::vector<std::vector<float>>>& scalarFunction, const float& isovalue);
+    void triangulate_field(const std::vector<std::vector<std::vector<float>>>& scalarFunction, const float& isovalue);
 
 };

@@ -26,8 +26,8 @@ void Random::update(Camera::Camera& camera) {
 void Random::setupMesh() {
 	trianglesGenerator = new TrianglesGenerator(attributes->gridSize);
 	gridGenerator = new GridGenerator(attributes->gridSize);
-	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_random_grid(), attributes->isoValue);
-	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
+	trianglesGenerator->triangulate_field(gridGenerator->generate_random_grid(), attributes->isoValue);
+	std::vector<Vertex> vertices = convertTrianglesToVertices(trianglesGenerator->triangles);
 	mesh = new Mesh(vertices, std::vector<Texture>{});
 }
 

@@ -27,8 +27,8 @@ void Sphere::update(Camera::Camera& camera) {
 void Sphere::setupMesh() {
 	trianglesGenerator = new TrianglesGenerator(attributes->gridSize);
 	gridGenerator = new GridGenerator(attributes->gridSize);
-	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_sphere(), attributes->isoValue);
-	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
+	trianglesGenerator->triangulate_field(gridGenerator->generate_sphere(), attributes->isoValue);
+	std::vector<Vertex> vertices = convertTrianglesToVertices(trianglesGenerator->triangles);
 	mesh = new Mesh(vertices, std::vector<Texture>{});
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 //#include <glad/glad.h>
+#include "CubeMarching/Types.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -19,6 +20,8 @@ struct Vertex {
 	// bitangent
 	glm::vec3 bitangent;
 
+	Vertex() {};
+	Vertex(Point p, glm::vec3 normal = glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2 texCoords = glm::vec2(0.0f), glm::vec3 tangent = glm::vec3(0.0f), glm::vec3 bitangent = glm::vec3(0.0f)) : position(glm::vec3(p.x, p.y, p.z)) {};
 	Vertex(glm::vec3 position, glm::vec3 normal = glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2 texCoords = glm::vec2(0.0f), glm::vec3 tangent = glm::vec3(0.0f), glm::vec3 bitangent = glm::vec3(0.0f)) : position(position), normal(normal), tangent(tangent), bitangent(bitangent) {};
 };
 

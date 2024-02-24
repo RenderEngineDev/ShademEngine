@@ -19,10 +19,21 @@ void Noise::draw(Camera::Camera& camera) {
 	mesh->DrawWithoutIndices();
 }
 
+#include <chrono>
 void Noise::update(Camera::Camera& camera) {
 	if (isUpdated()) {
-		mesh->vertices = convertTrianglesToVertices(trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, offset, scalarFunction), attributes->isoValue));
+
+		auto start1 = std::chrono::steady_clock::now();
+		trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, offset, scalarFunction), attributes->isoValue);
+		std::cout << "Elapsed(ms)= up1 " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start1).count() << std::endl;
+
+		auto start2 = std::chrono::steady_clock::now(); 
+		mesh->vertices = convertTrianglesToVertices(trianglesGenerator->triangles);
+		std::cout << "Elapsed(ms)= up2 " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start2).count() << std::endl;
+
+		auto start3 = std::chrono::steady_clock::now(); 
 		mesh->setupMeshWithouIndices();
+		std::cout << "Elapsed(ms)= up3 " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start3).count() << std::endl;
 		setUpdated(false);
 	}
 }
@@ -33,15 +44,13 @@ void Noise::setupMesh() {
 
 	trianglesGenerator = new TrianglesGenerator(noiseGridSize);
 	gridGenerator = new GridGenerator(noiseGridSize);
-	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, offset, scalarFunction), attributes->isoValue);
-	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
+	trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, offset, scalarFunction), attributes->isoValue);
+	std::vector<Vertex> vertices = convertTrianglesToVertices(trianglesGenerator->triangles);
 	mesh = new Mesh(vertices, std::vector<Texture>{});
 }
 //#include <chrono>
 
 std::vector<Vertex> Noise::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {
-	//auto start = std::chrono::steady_clock::now();
-
 	size_t totalSize = 0;
 	for (const auto& vec : triangles) {
 		totalSize += vec.size();
@@ -53,11 +62,6 @@ std::vector<Vertex> Noise::convertTrianglesToVertices(std::vector<std::vector<Po
 			flatVector.emplace_back(Vertex(glm::vec3(vertex.x, vertex.y, vertex.z)));
 		}
 	}
-	//for (const auto& vec : triangles) {
-		//flatVector.insert(flatVector.end(), vec.begin(), vec.end());
-	//}
-
-	//std::cout << "Elapsed(ms)= flat " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count() << std::endl;
 	return flatVector;
 }
 
