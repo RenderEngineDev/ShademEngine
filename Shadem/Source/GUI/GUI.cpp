@@ -6,7 +6,7 @@
 
 GUI::GUI() {
 	setupStartUpProperties();
-};
+}
 
 bool GUI::configure(GLFWwindow* window) {
 	// Setup Dear ImGui context

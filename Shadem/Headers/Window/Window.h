@@ -9,6 +9,7 @@ private:
 
 public:
 	Window() {}
+	~Window();
 
 	int configure(int width, int height);
 	GLFWwindow* getGLFWwindow();

@@ -5,11 +5,5 @@
 class CustomLevel : public Scene {
 
 public:
-	CustomLevel();
-
-	int configure();
-	void initBasicObjects();
-
-	~CustomLevel();
-
+	void initBasicObjects() override;
 };

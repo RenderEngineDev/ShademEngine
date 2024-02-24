@@ -71,49 +71,49 @@ void Shader::use()
 
 void Shader::setBool(const std::string& name, bool value) const
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+	glUniform1i(getUniformLocation(name.c_str()), (int)value);
 }
 
 void Shader::setInt(const std::string& name, int value) const
 {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1i(getUniformLocation(name.c_str()), value);
 }
 
 void Shader::setFloat(const std::string& name, float value) const
 {
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+	glUniform1f(getUniformLocation(name.c_str()), value);
 }
 
 void Shader::setVec2(const std::string& name, const glm::vec2& vec) const
 {
-	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
+	glUniform2fv(getUniformLocation(name.c_str()), 1, &vec[0]);
 }
 
 void Shader::setVec3(const std::string& name, const glm::vec3& vec) const
 {
-	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
+	glUniform3fv(getUniformLocation(name.c_str()), 1, &vec[0]);
 }
 
 void Shader::setVec4(const std::string& name, const glm::vec4& vec) const
 {
-	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
+	glUniform4fv(getUniformLocation(name.c_str()), 1, &vec[0]);
 }
 
 void Shader::setMat2(const std::string& name, glm::mat4& mat) const
 {
-	glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	glUniformMatrix2fv(getUniformLocation(name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 
 void Shader::setMat3(const std::string& name, glm::mat4& mat) const
 {
-	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	glUniformMatrix3fv(getUniformLocation(name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 
 void Shader::setMat4(const std::string& name, glm::mat4& mat) const
 {
-	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	glUniformMatrix4fv(getUniformLocation(name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 inline void Shader::setTexture2D(const std::string& textureName)
@@ -140,6 +140,22 @@ inline void Shader::setTexture2D(const std::string& textureName)
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
+}
+
+Shader::~Shader()
+{
+	glDeleteProgram(ID);
+}
+
+int Shader::getUniformLocation(const std::string& name) const
+{
+	if (uniformLocationCache.find(name) != uniformLocationCache.end()) 
+		return uniformLocationCache[name];
+
+	int location = glGetUniformLocation(ID, name.c_str());
+	uniformLocationCache[name] = location;
+
+	return location;
 }
 
 // utility function for checking shader compilation/linking errors.

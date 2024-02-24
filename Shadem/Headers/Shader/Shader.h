@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -18,13 +19,20 @@ namespace Shaders {
 	static const char* getCommonVertexShaderPath() {
 		return "../Shadem/Shaders/BasicShader/Vshader.glsl";
 	}
+
 	static const char* getRmSphereFragmentShaderPath() {
 		return "../Shadem/Shaders/RMShaders/SphereFshader.shader";
+	}
+	static const char* getRmVertexShaderPath() {
+		return "../Shadem/Shaders/RMShaders/Vshader.shader";
 	}
 }
 
 class Shader
 {
+	private:
+		mutable std::unordered_map<std::string, int> uniformLocationCache = std::unordered_map<std::string, int>();
+
 	public: 
 		// the program ID
 		unsigned int ID;
@@ -46,6 +54,12 @@ class Shader
 		void setMat3(const std::string& name, glm::mat4 &mat) const;
 		void setMat4(const std::string& name, glm::mat4& value) const;
 		void setTexture2D(const std::string& name);
+
+		~Shader();
+
 private:
+		
+		int getUniformLocation(const std::string& name) const;
+
 		void checkCompileErrors(GLuint shader, std::string type);
 };

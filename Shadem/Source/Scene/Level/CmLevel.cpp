@@ -2,15 +2,6 @@
 
 #include "Scene/Level/CmLevel.h"
 
-CmLevel::CmLevel() {
-	configure();
-};
-
-int CmLevel::configure() {
-	camera = new Camera::Camera(glm::vec3(0.0f, 15.0f, -35.0f));
-	return 1;
-}
-
 void CmLevel::initBasicObjects() {
 	createObject<PrimitiveObjectFactory, ObjectTypes::PrimitiveObjectType, ObjectAttributes::Common>(
 		ObjectTypes::PrimitiveObjectType(ObjectTypes::PrimitiveObjectType::CUBE), 
@@ -39,8 +30,4 @@ void CmLevel::initBasicObjects() {
 			1.0f, 
 			1.0f, 
 			0.5f, "Noise (CM)"));
-}
-
-CmLevel::~CmLevel() {
-	delete camera;
 }
