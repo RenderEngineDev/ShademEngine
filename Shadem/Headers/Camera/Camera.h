@@ -34,7 +34,7 @@ namespace Camera {
     private:
         glm::mat4 projection;
         glm::mat4 view;
-        glm::vec2 range = glm::vec2(0.1f, 250.0f);
+        glm::vec2 range = glm::vec2(0.1f, 500.0f);
 
     public:
         // camera Attributes
@@ -76,6 +76,13 @@ namespace Camera {
 
         glm::mat4& getView() {
             return view;
+        }
+
+        glm::mat4 getRotation() {
+            return glm::mat4{ glm::vec4(right,0),
+                              glm::vec4(up,   0),
+                              glm::vec4(front,0),
+                              glm::vec4(0,0,0,1) };
         }
 
         glm::vec2& getRange() { return range; }

@@ -18,8 +18,6 @@ protected:
 	*/
 
 
-	Shader shader;
-
 private:
 	
 
@@ -27,7 +25,7 @@ private:
 	virtual void setupMesh() override;
 
 public:
-	RMObject(ObjectAttributes::Common* attributes, const char* fShaderPath);
+	RMObject(ObjectAttributes::Common* attributes);
 	virtual void draw(Camera::Camera& camera) = 0;
 	~RMObject() {
 	}

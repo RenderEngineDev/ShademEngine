@@ -8,5 +8,10 @@ out vec3 FragPos;
 void main()
 { 
     FragPos = aPos;
-	gl_Position = vec4(aPos, 1.0);
+    float ang = radians(90.0f);
+    mat3 rotation = mat3(1.0f, 0.0f, 0.0f,
+                         0.0f, cos(ang), -sin(ang),
+                         0.0f, sin(ang), cos(ang));
+    
+	gl_Position = vec4(aPos * rotation, 1.0);
 }

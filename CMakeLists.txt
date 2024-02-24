@@ -15,6 +15,9 @@ include_directories(${INCLUDE_DIR})
 # Ustaw zmienne dla bibliotek GLFW, GLEW i GLM
 find_library(GLFW_LIBRARIES glfw3 HINTS ${GLFW_LIBRARY_DIR})
 
+# Ustaw zmienne dla bibliotek ASSIMP
+find_library(ASSIMP_LIBRARIES assimp-vc143-mt HINTS ${GLFW_LIBRARY_DIR})
+
 ########################################################################
 
 # Utwórz zmienną zawierającą wszystkie pliki źródłowe i nagłówkowe z katalogu "src"
@@ -99,7 +102,7 @@ add_library(imgui STATIC
 target_link_libraries(ShademEngine imgui)
 
 ########################################################################
-### IMGUI
+### Perlin Noise
 ########################################################################
 
 add_subdirectory(include/PerlinNoise/)
@@ -112,6 +115,17 @@ add_library(perlin STATIC
 
 # Dodaj zależności perlin do ShademEngine
 target_link_libraries(ShademEngine perlin)
+
+########################################################################
+### ASSIMP
+########################################################################
+
+target_link_libraries(ShademEngine ${ASSIMP_LIBRARIES})
+
+add_custom_command( TARGET ShademEngine
+    POST_BUILD
+    COMMAND xcopy /y /d ..\\${GLFW_LIBRARY_DIR}\\assimp-vc143-mt.dll $(OutDir)
+  )
 
 ########################################################################
 # Przenieś pliki nagłówkowe do folderu "Header Files" w projekcie Visual Studio

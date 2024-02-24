@@ -20,6 +20,7 @@ public:
 	static float deltaTime;
 
 	ShademEngine();
+	~ShademEngine();
 	
 	bool reloadScene(Scene *level);
 	void checkAndReloadLevelSelection();
@@ -27,4 +28,6 @@ public:
 	int run();
 	void calculateFrameTime();
 	int configure();
+
+	Scene* getScene() { return scene; }
 };

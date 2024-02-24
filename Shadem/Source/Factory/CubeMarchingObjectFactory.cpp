@@ -12,11 +12,11 @@ Object* CubeMarchingObjectFactory::createObject(CubeMarchingObjectType::Type obj
 		case ObjectTypes::CubeMarchingObjectType::PLANE:
 			return nullptr;
 		case ObjectTypes::CubeMarchingObjectType::SPHERE:
-			return new CubeMarching::Sphere(dynamic_cast<ObjectAttributes::CubeMarching*>(attributes), new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new CubeMarching::Sphere(dynamic_cast<ObjectAttributes::CubeMarching*>(attributes), Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case ObjectTypes::CubeMarchingObjectType::RANDOM:
-			return new CubeMarching::Random(dynamic_cast<ObjectAttributes::CubeMarching*>(attributes), new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new CubeMarching::Random(dynamic_cast<ObjectAttributes::CubeMarching*>(attributes), Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case ObjectTypes::CubeMarchingObjectType::NOISE:
-			return new CubeMarching::Noise(dynamic_cast<ObjectAttributes::CubeMarching*>(attributes), new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new CubeMarching::Noise(dynamic_cast<ObjectAttributes::CubeMarching*>(attributes), Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		default:
 			return nullptr;
 	}

@@ -18,7 +18,7 @@ Renderer::~Renderer()
 
 void Renderer::draw(Scene& scene)
 {
-	std::vector<Object*> objects = scene.getObjects();
+	std::vector<Object*>& objects = scene.getObjects();
 
 	Camera::Camera* sceneCamera = scene.getCamera();
 

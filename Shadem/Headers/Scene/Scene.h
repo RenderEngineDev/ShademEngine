@@ -23,12 +23,12 @@ protected:
 
 public:
 	Scene();
+	~Scene();
 
-	virtual int configure() = 0;
-	virtual void initBasicObjects() = 0;
+	virtual int configure();
+	virtual void initBasicObjects();
 
 	void update();
-	//int draw();
 	bool addObject(Object* object);
 	int getNumberOfObjects();
 
@@ -39,7 +39,5 @@ public:
 	
 	Camera::Camera* getCamera();
 	std::vector<Object*>& getObjects();
-
-	~Scene();
 
 };

@@ -4,7 +4,7 @@
 
 using namespace CubeMarching;
 
-Noise::Noise(ObjectAttributes::CubeMarching* attributes, Shader* shader) : CmObject(attributes, shader) {
+Noise::Noise(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : CmObject(attributes, vertFilePath, fragFilePath) {
 	setupMesh();
 }
 
@@ -16,13 +16,16 @@ void Noise::draw(Camera::Camera& camera) {
 	shader->setMat4("projection", camera.getProjection());
 	shader->setMat4("view", camera.getView());
 	shader->setMat4("model", model);
-	mesh->DrawWithoutIndices();
+
+	for (auto& mesh : *meshes) {
+		mesh->DrawWithoutIndices(shader);
+	}
 }
 
 void Noise::update(Camera::Camera& camera) {
 	if (isUpdated()) {
-		mesh->vertices = convertTrianglesToVertices(trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, offset, scalarFunction), attributes->isoValue));
-		mesh->setupMeshWithouIndices();
+		(*meshes)[0]->vertices = convertTrianglesToVertices(trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, offset, scalarFunction), attributes->isoValue));
+		(*meshes)[0]->setupMeshWithouIndices();
 		setUpdated(false);
 	}
 }
@@ -35,7 +38,7 @@ void Noise::setupMesh() {
 	gridGenerator = new GridGenerator(noiseGridSize);
 	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_noise(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, offset, scalarFunction), attributes->isoValue);
 	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
-	mesh = new Mesh(vertices, std::vector<Texture>{});
+	meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(vertices, std::vector<std::shared_ptr<Texture>>{})});
 }
 
 std::vector<Vertex> Noise::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {

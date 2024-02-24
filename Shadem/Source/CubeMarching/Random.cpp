@@ -4,7 +4,7 @@
 
 using namespace CubeMarching;
 
-Random::Random(ObjectAttributes::CubeMarching* attributes, Shader* shader) : CmObject(attributes, shader) {
+Random::Random(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : CmObject(attributes, vertFilePath, fragFilePath) {
 	setupMesh();
 }
 
@@ -16,7 +16,9 @@ void Random::draw(Camera::Camera& camera) {
 	shader->setMat4("projection", camera.getProjection());
 	shader->setMat4("view", camera.getView());
 	shader->setMat4("model", model);
-	mesh->DrawWithoutIndices();
+
+	for(auto& mesh : (*meshes))
+		mesh->DrawWithoutIndices(shader);
 }
 
 void Random::update(Camera::Camera& camera) {
@@ -28,7 +30,7 @@ void Random::setupMesh() {
 	gridGenerator = new GridGenerator(attributes->gridSize);
 	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_random_grid(), attributes->isoValue);
 	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
-	mesh = new Mesh(vertices, std::vector<Texture>{});
+	meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(vertices, std::vector<std::shared_ptr<Texture>>{})});
 }
 
 std::vector<Vertex> Random::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {

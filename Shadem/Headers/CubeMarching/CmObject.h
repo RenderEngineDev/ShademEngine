@@ -14,8 +14,10 @@ namespace CubeMarching {
 
 	public:
 
-		CmObject(ObjectAttributes::CubeMarching* attributes, Shader *shader) : attributes(attributes), Object(attributes) {
-			this->shader = shader;
+		CmObject(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : attributes(attributes), Object(attributes) {
+			auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+			this->shader = shaderPair.second;
+			setShaderResourceKey(shaderPair.first);
 		}
 
 		virtual void draw(Camera::Camera& camera) = 0;
@@ -43,7 +45,7 @@ namespace CubeMarching {
 	class Sphere : public CmObject {
 	public:
 
-		Sphere(ObjectAttributes::CubeMarching* attributes, Shader* shader);
+		Sphere(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath);
 
 		void draw(Camera::Camera& camera) override;
 		void update(Camera::Camera& camera) override;
@@ -64,7 +66,7 @@ namespace CubeMarching {
 
 	public:
 
-		Random(ObjectAttributes::CubeMarching* attributes, Shader* shader);
+		Random(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath);
 
 		void draw(Camera::Camera& camera) override;
 		void update(Camera::Camera& camera) override;
@@ -86,7 +88,7 @@ namespace CubeMarching {
 		std::vector<std::vector<std::vector<float>>> scalarFunction;
 
 	public:
-		Noise(ObjectAttributes::CubeMarching* attributes, Shader* shader);
+		Noise(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath);
 
 		void draw(Camera::Camera& camera) override;
 		void update(Camera::Camera& camera) override;

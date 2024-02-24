@@ -19,10 +19,6 @@ Controller::Controller::Controller(Camera::Camera* camera) {
 
 bool Controller::Controller::setCamera(Camera::Camera* camera) {
 	if (camera) {
-		/*Controller::Controller::isCursorHidden = false;
-		Controller::Controller::firstMouse = true;
-		Controller::Controller::lastX = SCREEN_WIDTH / 2.0f;
-		Controller::Controller::lastY = SCREEN_HEIGHT / 2.0f;*/
 		Controller::camera = camera;
 		return true;
 	} 
@@ -34,6 +30,8 @@ int Controller::Controller::configure(GLFWwindow* window) {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+
+	glfwSwapInterval(0);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------

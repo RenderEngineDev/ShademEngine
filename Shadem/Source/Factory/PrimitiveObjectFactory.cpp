@@ -9,19 +9,19 @@ Object* PrimitiveObjectFactory::createObject(PrimitiveObjectType::Type objectTyp
 	// TODO: implementacja obiektów prymitywnych
 	switch (objectType) {
 		case PrimitiveObjectType::CUBE:
-			return new Cube(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new Cube(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::PLANE:
-			return new Plane(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new Plane(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::SPHERE:
-			return nullptr;
+			return new Sphere(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::CIRCLE:
-			return nullptr;
+			return new Circle(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::CONE:
-			return nullptr;
+			return new Cone(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::CYLINDER:
-			return nullptr;
+			return new Cylinder(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::TORUS:
-			return nullptr;
+			return new Torus(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		default:
 			return nullptr;
 		}

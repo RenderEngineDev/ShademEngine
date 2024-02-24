@@ -2,6 +2,11 @@
 
 #include "Window/Window.h"
 
+Window::~Window()
+{
+	glfwDestroyWindow(glfwWindow);
+}
+
 int Window::configure(int width, int height) {
 
 	glfwInit();
@@ -11,7 +16,6 @@ int Window::configure(int width, int height) {
 
 	glfwWindow = glfwCreateWindow(width, height, "Shadem", NULL, NULL);
 	glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	glfwSwapInterval(0);
 
 	if (glfwWindow == NULL)
 	{

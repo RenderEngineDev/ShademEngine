@@ -19,6 +19,15 @@ ShademEngine::ShademEngine() {
 	configure();
 }
 
+ShademEngine::~ShademEngine()
+{
+	delete scene;
+	delete controller;
+	delete window;
+	delete gui;
+	delete renderer;
+}
+
 int ShademEngine::run() {
 
 	while (!glfwWindowShouldClose(window->getGLFWwindow())) {
@@ -103,6 +112,8 @@ int ShademEngine::configure() {
 		return -1;
 	}
 	gui->setupStartUpProperties();
+
+
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
