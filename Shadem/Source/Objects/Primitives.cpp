@@ -1,6 +1,6 @@
 #include "Objects/Primitives.h"
 
-Primitives::Plane::Plane(ObjectAttributes::Common* attributes, Shader* shader) : Object(attributes) {
+Primitives::Plane::Plane(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader) : Object(attributes) {
 	this->shader = shader;
 	setupMesh();
 }
@@ -38,7 +38,7 @@ void Primitives::Plane::update(Camera::Camera& camera) {
 
 }
 
-Primitives::Cube::Cube(ObjectAttributes::Common* attributes, Shader* shader) : Object(attributes) {
+Primitives::Cube::Cube(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader) : Object(attributes) {
 	this->shader = shader;
 	setupMesh();
 }
@@ -81,13 +81,14 @@ void Primitives::Cube::setupMesh() {
 }
 
 void Primitives::Cube::draw(Camera::Camera &camera) {
-	this->shader->use();
+	shader->use();
+	
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, attributes->position);
 	model = glm::scale(model, attributes->scale);
-	this->shader->setMat4("projection", camera.getProjection());
-	this->shader->setMat4("view", camera.getView());
-	this->shader->setMat4("model", model);
+	shader->setMat4("projection", camera.getProjection());
+	shader->setMat4("view", camera.getView());
+	shader->setMat4("model", model);
 
 	mesh->Draw();
 }
@@ -103,7 +104,8 @@ Primitives::RMSphere::RMSphere(ObjectAttributes::Sphereous* attributes, const ch
 
 void Primitives::RMSphere::draw(Camera::Camera& camera)
 {
-	shader.use();
+	shader->use();
+	
 	/*
 		definicje view przeniesc do kamery, aby mogla zwrocic sama rotacje bez przesuniecia
 	*/
@@ -112,13 +114,13 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 					 glm::vec4(camera.front,0),
 					 glm::vec4(camera.right,1) };
 
-	shader.setMat4("View", view);
-	shader.setVec3("CameraPos", camera.position);
-	shader.setVec3("SpherePos", attributes->position);
-	shader.setFloat("Zoom", camera.zoom);
-	shader.setVec2("WindowSize", camera.window->getWindowSize());
-	shader.setVec3("Scale", attributes->scale);
-	shader.setVec2("CameraRange", camera.getRange());
+	shader->setMat4("View", view);
+	shader->setFloat("Zoom", camera.zoom);
+	shader->setVec3("CameraPos", camera.position);
+	shader->setVec2("CameraRange", camera.getRange());
+	shader->setVec2("WindowSize", camera.window->getWindowSize());
+	shader->setVec3("SpherePos", attributes->position);
+	shader->setVec3("Scale", attributes->scale);
 
 	mesh->Draw();
 }

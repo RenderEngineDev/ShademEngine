@@ -4,7 +4,7 @@
 
 using namespace CubeMarching;
 
-Noise::Noise(ObjectAttributes::CubeMarching* attributes, Shader* shader) : CmObject(attributes, shader) {
+Noise::Noise(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader>& shader) : CmObject(attributes, shader) {
 	setupMesh();
 }
 

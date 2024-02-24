@@ -73,6 +73,7 @@ bool ShademEngine::reloadScene(Scene *level) {
 		scene->initBasicObjects();
 		controller->setCamera(scene->getCamera());
 		scene->getCamera()->linkWindow(window);
+		ResourceManager::cleanUp();
 		return true;
 	}
 	return false;
@@ -103,6 +104,8 @@ int ShademEngine::configure() {
 		return -1;
 	}
 	gui->setupStartUpProperties();
+
+
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);

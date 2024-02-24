@@ -18,8 +18,6 @@ protected:
 	*/
 
 
-	Shader shader;
-
 private:
 	
 

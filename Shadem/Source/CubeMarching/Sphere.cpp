@@ -4,7 +4,7 @@
 
 using namespace CubeMarching;
 
-Sphere::Sphere(ObjectAttributes::CubeMarching* attributes, Shader* shader) : CmObject(attributes, shader) {
+Sphere::Sphere(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader>& shader) : CmObject(attributes, shader) {
 	setupMesh();
 }
 

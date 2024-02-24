@@ -12,7 +12,7 @@ namespace Primitives {
 
 	class Plane : public Object {
 	public:
-		Plane(ObjectAttributes::Common* attributes, Shader* shadere);
+		Plane(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader);
 		virtual void draw(Camera::Camera &camera) override;
 		virtual void update(Camera::Camera& camera) override;
 	private:
@@ -21,7 +21,7 @@ namespace Primitives {
 
 	class Cube : public Object {
 	public:
-		Cube(ObjectAttributes::Common* attributes, Shader* shader);
+		Cube(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader);
 		virtual void draw(Camera::Camera &camera) override;
 		virtual void update(Camera::Camera& camera) override;
 	private:

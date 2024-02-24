@@ -4,6 +4,7 @@
 #include "Objects/Attributes.h"
 #include "Shader/Shader.h"
 #include "Camera/Camera.h"
+#include "ResourceManager/ResourceManager.h"
 
 enum RenderType
 {
@@ -24,7 +25,7 @@ protected:
 	// glm::vec3 right;
 	// glm::vec3 worldUp;
 
-	Shader* shader = nullptr;
+	std::shared_ptr<Shader> shader = nullptr;
 	Mesh* mesh = nullptr;
 	RenderType renderer = RenderType::StandardRender;
 
@@ -43,7 +44,7 @@ public:
 
 	~Object() {
 		delete mesh;
-		delete shader;
+		//delete shader;
 		delete attributes;
 	}
 

@@ -1,8 +1,10 @@
 #include "Objects/RMObject.h"
 
 
-RMObject::RMObject(ObjectAttributes::Common* attributes, const char* fShaderPath) : Object(attributes), shader("../Shadem/Shaders/RMShaders/Vshader.shader", fShaderPath)
+RMObject::RMObject(ObjectAttributes::Common* attributes, const char* fShaderPath) : Object(attributes)
 {
+	this->shader = ResourceManager::createOrGetShader("../Shadem/Shaders/RMShaders/Vshader.shader", fShaderPath);
+	//shader("../Shadem/Shaders/RMShaders/Vshader.shader", fShaderPath)
 	setupMesh();
 }
 

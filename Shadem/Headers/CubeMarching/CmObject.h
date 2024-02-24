@@ -14,7 +14,7 @@ namespace CubeMarching {
 
 	public:
 
-		CmObject(ObjectAttributes::CubeMarching* attributes, Shader *shader) : attributes(attributes), Object(attributes) {
+		CmObject(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader> &shader) : attributes(attributes), Object(attributes) {
 			this->shader = shader;
 		}
 
@@ -43,7 +43,7 @@ namespace CubeMarching {
 	class Sphere : public CmObject {
 	public:
 
-		Sphere(ObjectAttributes::CubeMarching* attributes, Shader* shader);
+		Sphere(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader>& shader);
 
 		void draw(Camera::Camera& camera) override;
 		void update(Camera::Camera& camera) override;
@@ -64,7 +64,7 @@ namespace CubeMarching {
 
 	public:
 
-		Random(ObjectAttributes::CubeMarching* attributes, Shader* shader);
+		Random(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader>& shader);
 
 		void draw(Camera::Camera& camera) override;
 		void update(Camera::Camera& camera) override;
@@ -86,7 +86,7 @@ namespace CubeMarching {
 		std::vector<std::vector<std::vector<float>>> scalarFunction;
 
 	public:
-		Noise(ObjectAttributes::CubeMarching* attributes, Shader* shader);
+		Noise(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader>& shader);
 
 		void draw(Camera::Camera& camera) override;
 		void update(Camera::Camera& camera) override;
