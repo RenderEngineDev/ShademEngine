@@ -14,6 +14,9 @@ namespace Shaders {
 	static const char* getCommonFragmentShaderPath() {
 		return "../Shadem/Shaders/BasicShader/Fshader.glsl";
 	}
+	static const char* getCommonComputeShaderPath() {
+		return "../Shadem/Shaders/BasicShader/Cshader.shader";
+	}
 
 	static const char* getCommonVertexShaderPath() {
 		return "../Shadem/Shaders/BasicShader/Vshader.glsl";
@@ -32,7 +35,7 @@ class Shader
 
 		// constructor reads and builds the shader
 		Shader() {};
-		Shader(const char* vertexPath, const char* fragmentPath);
+		Shader(const char* vertexPath, const char* fragmentPath, const char* computePath = Shaders::getCommonComputeShaderPath());
 		// use/activate the shader
 		void use();
 		// utility uniform functions

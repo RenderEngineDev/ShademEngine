@@ -11,7 +11,7 @@ Object* PrimitiveObjectFactory::createObject(PrimitiveObjectType::Type objectTyp
 		case PrimitiveObjectType::CUBE:
 			return new Cube(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
 		case PrimitiveObjectType::PLANE:
-			return new Plane(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new Plane(attributes, new Shader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath(), Shaders::getCommonComputeShaderPath()));
 		case PrimitiveObjectType::SPHERE:
 			return nullptr;
 		case PrimitiveObjectType::CIRCLE:
