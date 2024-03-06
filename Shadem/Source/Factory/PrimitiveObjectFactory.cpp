@@ -9,9 +9,9 @@ Object* PrimitiveObjectFactory::createObject(PrimitiveObjectType::Type objectTyp
 	// TODO: implementacja obiektów prymitywnych
 	switch (objectType) {
 		case PrimitiveObjectType::CUBE:
-			return new Cube(attributes, ResourceManager::createOrGetShader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new Cube(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::PLANE:
-			return new Plane(attributes, ResourceManager::createOrGetShader(Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath()));
+			return new Plane(attributes, Shaders::getCommonVertexShaderPath(), Shaders::getCommonFragmentShaderPath());
 		case PrimitiveObjectType::SPHERE:
 			return nullptr;
 		case PrimitiveObjectType::CIRCLE:

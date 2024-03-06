@@ -56,4 +56,5 @@ public:
 private:
 	// render data
 	unsigned int VAO, VBO, EBO;
+
 };

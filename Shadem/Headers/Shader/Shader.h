@@ -19,15 +19,19 @@ namespace Shaders {
 	static const char* getCommonVertexShaderPath() {
 		return "../Shadem/Shaders/BasicShader/Vshader.glsl";
 	}
+
 	static const char* getRmSphereFragmentShaderPath() {
 		return "../Shadem/Shaders/RMShaders/SphereFshader.shader";
+	}
+	static const char* getRmVertexShaderPath() {
+		return "../Shadem/Shaders/RMShaders/Vshader.shader";
 	}
 }
 
 class Shader
 {
 	private:
-		mutable std::unordered_map<std::string, int> uniformLocationCache;
+		mutable std::unordered_map<std::string, int> uniformLocationCache = std::unordered_map<std::string, int>();
 
 	public: 
 		// the program ID

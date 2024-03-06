@@ -12,7 +12,7 @@ namespace Primitives {
 
 	class Plane : public Object {
 	public:
-		Plane(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader);
+		Plane(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath);
 		virtual void draw(Camera::Camera &camera) override;
 		virtual void update(Camera::Camera& camera) override;
 	private:
@@ -21,7 +21,7 @@ namespace Primitives {
 
 	class Cube : public Object {
 	public:
-		Cube(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader);
+		Cube(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath);
 		virtual void draw(Camera::Camera &camera) override;
 		virtual void update(Camera::Camera& camera) override;
 	private:
@@ -30,7 +30,7 @@ namespace Primitives {
 
 	class RMSphere : public RMObject {
 	public:
-		RMSphere(ObjectAttributes::Sphereous* attributes, const char* fShaderPath);
+		RMSphere(ObjectAttributes::Sphereous* attributes, const std::string& fragFilePath);
 		virtual void draw(Camera::Camera& camera) override;
 		virtual void update(Camera::Camera& camera) override;
 	private:

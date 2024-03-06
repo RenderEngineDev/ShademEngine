@@ -1,11 +1,13 @@
 #include "Objects/RMObject.h"
 
 
-RMObject::RMObject(ObjectAttributes::Common* attributes, const char* fShaderPath) : Object(attributes)
+RMObject::RMObject(ObjectAttributes::Common* attributes) : Object(attributes)
 {
-	this->shader = ResourceManager::createOrGetShader("../Shadem/Shaders/RMShaders/Vshader.shader", fShaderPath);
-	//shader("../Shadem/Shaders/RMShaders/Vshader.shader", fShaderPath)
-	setupMesh();
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/plane.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+
+	//setupMesh();
 }
 
 void RMObject::setupMesh()
@@ -24,6 +26,6 @@ void RMObject::setupMesh()
 
 	std::vector<Texture> textures = std::vector<Texture>();
 
-	this->mesh = new Mesh(vertices, indices, textures);
+	this->meshes = std::make_shared<std::vector<Mesh>>(std::vector<Mesh>{ Mesh(vertices, indices, textures) });
 }
 

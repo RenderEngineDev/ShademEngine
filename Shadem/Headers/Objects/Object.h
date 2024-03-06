@@ -12,6 +12,8 @@ enum RenderType
 	RayMarchingRender,
 	CubeMarchingRender
 };
+
+
 class Object {
 
 protected:
@@ -26,15 +28,24 @@ protected:
 	// glm::vec3 worldUp;
 
 	std::shared_ptr<Shader> shader = nullptr;
-	Mesh* mesh = nullptr;
+	std::shared_ptr<std::vector<Mesh>> meshes = nullptr;
+
 	RenderType renderer = RenderType::StandardRender;
 
 private:
+
+	std::string meshResourceKey = std::string();
+	std::string& shaderResourceKey = std::string();
+
 	virtual void setupMesh() = 0;
 
 public:
+
 	Object() {};
 	Object(ObjectAttributes::Common* attributes);
+
+	Object(const std::string& filePath ,ObjectAttributes::Common* attributes = new ObjectAttributes::Common());
+
 	virtual void draw(Camera::Camera &camera) = 0;
 	virtual void update(Camera::Camera& camera) = 0;
 
@@ -43,11 +54,18 @@ public:
 	}
 
 	~Object() {
-		delete mesh;
+		std::cout << "mesh to del: " << meshResourceKey << "\n";
+
+		ResourceManager::tryDeleteMesh(meshResourceKey);
+		ResourceManager::tryDeleteShader(shaderResourceKey);
+		//delete meshes;
 		//delete shader;
 		delete attributes;
 	}
 
 	RenderType& getRenderType() { return renderer; }
+
+	void setMeshResourceKey(const std::string& key) { meshResourceKey = key; }
+	void setShaderResourceKey(const std::string& key) { shaderResourceKey = key; }
 
 };

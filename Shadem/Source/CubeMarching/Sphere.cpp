@@ -4,7 +4,7 @@
 
 using namespace CubeMarching;
 
-Sphere::Sphere(ObjectAttributes::CubeMarching* attributes, std::shared_ptr<Shader>& shader) : CmObject(attributes, shader) {
+Sphere::Sphere(ObjectAttributes::CubeMarching* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : CmObject(attributes, vertFilePath, fragFilePath) {
 	setupMesh();
 }
 
@@ -17,7 +17,9 @@ void Sphere::draw(Camera::Camera& camera) {
 	shader->setMat4("projection", camera.getProjection());
 	shader->setMat4("view", camera.getView());
 	shader->setMat4("model", model);
-	mesh->DrawWithoutIndices();
+
+	for (auto& mesh : (*meshes))
+		mesh.DrawWithoutIndices();
 }
 
 void Sphere::update(Camera::Camera& camera) {
@@ -29,7 +31,7 @@ void Sphere::setupMesh() {
 	gridGenerator = new GridGenerator(attributes->gridSize);
 	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_sphere(), attributes->isoValue);
 	std::vector<Vertex> vertices = convertTrianglesToVertices(triangles);
-	mesh = new Mesh(vertices, std::vector<Texture>{});
+	meshes = std::make_shared<std::vector<Mesh>>(std::vector<Mesh>{Mesh(vertices, std::vector<Texture>{})});
 }
 
 std::vector<Vertex> Sphere::convertTrianglesToVertices(std::vector<std::vector<Point>> triangles) {

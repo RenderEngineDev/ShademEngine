@@ -27,4 +27,6 @@ public:
 	int run();
 	void calculateFrameTime();
 	int configure();
+
+	Scene* getScene() { return scene; }
 };

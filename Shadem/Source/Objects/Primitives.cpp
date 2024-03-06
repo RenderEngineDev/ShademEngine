@@ -1,8 +1,15 @@
 #include "Objects/Primitives.h"
 
-Primitives::Plane::Plane(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader) : Object(attributes) {
-	this->shader = shader;
-	setupMesh();
+Primitives::Plane::Plane(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes) {
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/plane.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+
+	//setupMesh();
 }
 
 void Primitives::Plane::setupMesh() {
@@ -19,7 +26,7 @@ void Primitives::Plane::setupMesh() {
 		});
 	std::vector<Texture> textures = std::vector<Texture>();
 
-	this->mesh = new Mesh(vertices, indices, textures);
+	this->meshes = std::make_shared<std::vector<Mesh>>(std::vector<Mesh>{ Mesh(vertices, indices, textures) });
 }
 
 void Primitives::Plane::draw(Camera::Camera &camera) {
@@ -31,16 +38,24 @@ void Primitives::Plane::draw(Camera::Camera &camera) {
 	this->shader->setMat4("view", camera.getView());
 	this->shader->setMat4("model", model);
 
-	mesh->Draw();
+	for(auto& mesh : *meshes)
+		mesh.Draw();
 }
 
 void Primitives::Plane::update(Camera::Camera& camera) {
 
 }
 
-Primitives::Cube::Cube(ObjectAttributes::Common* attributes, std::shared_ptr<Shader>& shader) : Object(attributes) {
-	this->shader = shader;
-	setupMesh();
+Primitives::Cube::Cube(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes) {
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/cube.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+
+	//setupMesh();
 }
 
 void Primitives::Cube::setupMesh() {
@@ -77,7 +92,7 @@ void Primitives::Cube::setupMesh() {
 		});
 	std::vector<Texture> textures = std::vector<Texture>();
 
-	this->mesh = new Mesh(vertices, indices, textures);
+	this->meshes = std::make_shared<std::vector<Mesh>>(std::vector<Mesh>{ Mesh(vertices, indices, textures) });
 }
 
 void Primitives::Cube::draw(Camera::Camera &camera) {
@@ -90,16 +105,19 @@ void Primitives::Cube::draw(Camera::Camera &camera) {
 	shader->setMat4("view", camera.getView());
 	shader->setMat4("model", model);
 
-	mesh->Draw();
+	for(auto& mesh : *meshes)
+		mesh.Draw();
 }
 
 void Primitives::Cube::update(Camera::Camera& camera) {
 
 }
 
-Primitives::RMSphere::RMSphere(ObjectAttributes::Sphereous* attributes, const char* fShaderPath) : RMObject(attributes, fShaderPath)
+Primitives::RMSphere::RMSphere(ObjectAttributes::Sphereous* attributes, const std::string& fragFilePath) : RMObject(attributes)
 {
-
+	auto shaderPair = ResourceManager::createOrGetShader(Shaders::getRmVertexShaderPath(), fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
 }
 
 void Primitives::RMSphere::draw(Camera::Camera& camera)
@@ -122,7 +140,8 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 	shader->setVec3("SpherePos", attributes->position);
 	shader->setVec3("Scale", attributes->scale);
 
-	mesh->Draw();
+	for(auto& mesh : *meshes)
+		mesh.Draw();
 }
 
 void Primitives::RMSphere::update(Camera::Camera& camera) {

@@ -32,6 +32,14 @@ public:
 	bool addObject(Object* object);
 	int getNumberOfObjects();
 
+
+	void clear() { for (auto& o : objects) delete o; objects.clear(); std::cout << "mesh: " << ResourceManager::mapOfMeshes.size() << "\n";
+	for (auto& m : ResourceManager::mapOfMeshes)
+		std::cout << "name: " << m.first << "\n";
+	}
+
+
+
 	template<class FactoryType, class ObjectEnumType, class AttributeType>
 	inline bool createObject(ObjectEnumType objectType, AttributeType* attributes) {
 		return addObject(FactoryType::createObject(objectType.getType(), attributes));
