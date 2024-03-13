@@ -33,11 +33,6 @@ int ShademEngine::run() {
 			scene->getCamera()->processViewAndProjection();
 			scene->update();
 			renderer->draw(*scene);
-
-			if (glfwGetKey(this->window->getGLFWwindow(), GLFW_KEY_K) == GLFW_PRESS) {
-				std::cout << "K pressed\n";
-				scene->clear();
-			}
 		}
 
 		gui->startGuiFrame();

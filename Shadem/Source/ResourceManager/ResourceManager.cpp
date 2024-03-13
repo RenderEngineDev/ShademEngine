@@ -5,8 +5,8 @@
 std::unordered_map<std::string, std::shared_ptr<Shader>> ResourceManager::mapOfShaders = std::unordered_map<std::string, std::shared_ptr<Shader>>();
 std::unordered_map<std::string, std::shared_ptr<std::vector<Mesh>>> ResourceManager::mapOfMeshes = std::unordered_map<std::string, std::shared_ptr<std::vector<Mesh>>>();
 
-
-std::pair<const std::string&, std::shared_ptr<Shader>&> ResourceManager::createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath)
+/* returns pair of key and shader, creates one if doesn't exists under given key */
+std::pair<const std::string, std::shared_ptr<Shader>>& ResourceManager::createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath)
 {
 	auto mapElement = mapOfShaders.find(vertexShaderFilePath + "|" + fragmentShaderFilePath);
 
@@ -14,16 +14,13 @@ std::pair<const std::string&, std::shared_ptr<Shader>&> ResourceManager::createO
 		mapOfShaders.emplace(vertexShaderFilePath + "|" + fragmentShaderFilePath, std::make_shared<Shader>(vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str()));
 		mapElement = mapOfShaders.find(vertexShaderFilePath + "|" + fragmentShaderFilePath);
 
-        std::cout << "Shader map: " << mapOfShaders.size() << " (ins)\n";
-		return std::pair<const std::string&, std::shared_ptr<Shader>&>((*mapElement).first, (*mapElement).second);
+		return *mapElement;
 	}
-
-    std::cout << "Shader map: " << mapOfShaders.size() << " (ins)\n";
-	return std::pair<const std::string&, std::shared_ptr<Shader>&>((*mapElement).first, (*mapElement).second);
+	return *mapElement;
 }
 
-
-std::pair<const std::string&, std::shared_ptr<std::vector<Mesh>>&> ResourceManager::createOrGetMesh(const std::string& meshFilePath)
+/* returns pair of key and model, creates one if doesn't exists under given key */
+std::pair<const std::string, std::shared_ptr<std::vector<Mesh>>>& ResourceManager::createOrGetMesh(const std::string& meshFilePath)
 {
 	auto mapElement = mapOfMeshes.find(meshFilePath);
 
@@ -32,30 +29,43 @@ std::pair<const std::string&, std::shared_ptr<std::vector<Mesh>>&> ResourceManag
         mapElement = mapOfMeshes.find(meshFilePath);
 
         loadModel(meshFilePath, (*mapElement).second);
-
-        std::cout << "Mesh map: " << mapOfMeshes.size() << " (ins)\n";
-        return std::pair<const std::string&, std::shared_ptr<std::vector<Mesh>>&>((*mapElement).first, (*mapElement).second);
+        return *mapElement;
 	}
-
-    std::cout << "Mesh map: " << mapOfMeshes.size() << " (ins)\n";
-    for (auto x : mapOfMeshes)
-        std::cout << x.first << "\n";
-
-    return std::pair<const std::string&, std::shared_ptr<std::vector<Mesh>>&>((*mapElement).first, (*mapElement).second);
+    return *mapElement;
 }
 
+/* inserts object into resource manager under given key if doesn't have one */
+void ResourceManager::emplaceMesh(const std::string& meshFilePath, std::shared_ptr<std::vector<Mesh>>& model)
+{
+    if (mapOfMeshes.find(meshFilePath) == mapOfMeshes.end())
+        mapOfMeshes.emplace(meshFilePath, model);
+}
+
+/* returns true if contains object under given key, false otherwise */
+bool ResourceManager::containsMesh(const std::string& meshFilePath)
+{
+    if(mapOfMeshes.find(meshFilePath) == mapOfMeshes.end())
+        return false;
+    return true;
+}
+
+/* returns reference to shared_ptr, can return empty shared_ptr if doesn't contain given key */
+std::shared_ptr<std::vector<Mesh>>& ResourceManager::findMesh(const std::string& meshFilePath)
+{
+    auto mapElement = mapOfMeshes.find(meshFilePath);
+    return (*mapElement).second;
+}
+
+/* tries to clear memory from shaders map under given key */
 void ResourceManager::tryDeleteShader(std::string& shaderPath)
 {
     mapOfShaders.erase(shaderPath);
-
-    std::cout << "Shader map: " << mapOfShaders.size() << " (del)\n";
 }
 
+/* tries to clear memory from mesh map under given key */
 void ResourceManager::tryDeleteMesh(std::string& meshPath)
 {
     mapOfMeshes.erase(meshPath);
-
-    std::cout << "Mesh map: " << mapOfMeshes.size() << " (del)\n";
 }
 
 void ResourceManager::loadModel(const std::string& filePath, std::shared_ptr<std::vector<Mesh>>& meshes)
@@ -162,7 +172,7 @@ std::vector<Texture> ResourceManager::loadMaterialTextures(aiMaterial* mat, aiTe
         aiString str;
         mat->GetTexture(type, i, &str);
         Texture texture;
-        texture.id = TextureFromFile(str.C_Str(), filePath.substr(0, filePath.find_first_of('/')));
+        texture.id = TextureFromFile(str.C_Str(), filePath.substr(0, filePath.find_first_of("/")));
         texture.type = typeName;
         texture.path = str.C_Str();
         textures.push_back(texture);

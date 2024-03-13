@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CubeMarching/CmObject.h"
+//#include "Primitives.h"
 
 using namespace CubeMarching;
 
@@ -27,6 +28,10 @@ void Sphere::update(Camera::Camera& camera) {
 }
 
 void Sphere::setupMesh() {
+	//auto a = ResourceManager::findMesh("tegoNaBankNieMa");
+	//if(a != nullptr)
+	//	std::cout <<(*a).size() << "\n";
+
 	trianglesGenerator = new TrianglesGenerator(attributes->gridSize);
 	gridGenerator = new GridGenerator(attributes->gridSize);
 	std::vector<std::vector<Point>> triangles = trianglesGenerator->triangulate_field(gridGenerator->generate_sphere(), attributes->isoValue);

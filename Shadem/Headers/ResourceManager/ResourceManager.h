@@ -2,7 +2,6 @@
 
 #include "Shader/Shader.h"
 #include "Objects/Mesh.h"
-#include "map"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -11,6 +10,7 @@
 #include <string_view>
 
 #include <vector>
+#include <map>
 
 #define ASSIMP_LOAD_FLAGS (aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices)
 
@@ -20,6 +20,7 @@ public:
 
 	static std::unordered_map<std::string, std::shared_ptr<Shader>> mapOfShaders;
 	static std::unordered_map<std::string, std::shared_ptr<std::vector<Mesh>>> mapOfMeshes;
+
 private:
 	static void loadModel(const std::string& filePath, std::shared_ptr<std::vector<Mesh>>& meshes);
 	static void processNode(aiNode* node, const aiScene* scene, const std::string& filePath, std::shared_ptr<std::vector<Mesh>>& meshes);
@@ -29,8 +30,12 @@ private:
 
 public:
 
-	static std::pair<const std::string&, std::shared_ptr<Shader>&> createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
-	static std::pair<const std::string&, std::shared_ptr<std::vector<Mesh>>&> createOrGetMesh(const std::string& MeshFilePath);
+	static std::pair<const std::string, std::shared_ptr<Shader>>& createOrGetShader(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+	static std::pair<const std::string, std::shared_ptr<std::vector<Mesh>>>& createOrGetMesh(const std::string& meshFilePath);
+
+	static void emplaceMesh(const std::string& meshFilePath, std::shared_ptr<std::vector<Mesh>>& model);
+	static bool containsMesh(const std::string& meshFilePath);
+	static std::shared_ptr<std::vector<Mesh>>& findMesh(const std::string& meshFilePath);
 
 	static void tryDeleteShader(std::string& shaderPath);
 	static void tryDeleteMesh(std::string& meshPath);

@@ -78,6 +78,13 @@ namespace Camera {
             return view;
         }
 
+        glm::mat4 getRotation() {
+            return glm::mat4{ glm::vec4(right,0),
+                              glm::vec4(up,   0),
+                              glm::vec4(front,0),
+                              glm::vec4(0,0,0,1) };
+        }
+
         glm::vec2& getRange() { return range; }
 
         void linkWindow(Window* _window) { window = _window; }

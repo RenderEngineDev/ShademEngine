@@ -1,4 +1,5 @@
 #pragma once
+#include <Shader/Shader.h>
 
 //#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -6,6 +7,7 @@
 
 #include <string>
 #include <vector>
+
 
 struct Vertex {
 	// position
@@ -42,7 +44,7 @@ public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures);
 
-	void Draw();
+	void Draw(std::shared_ptr<Shader>& shader);
 	void DrawWithoutIndices();
 
 	unsigned int getVAO() const;

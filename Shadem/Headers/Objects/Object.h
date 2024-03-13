@@ -34,8 +34,8 @@ protected:
 
 private:
 
-	std::string meshResourceKey = std::string();
-	std::string& shaderResourceKey = std::string();
+	std::string meshResourceKey;
+	std::string shaderResourceKey;
 
 	virtual void setupMesh() = 0;
 
@@ -46,7 +46,7 @@ public:
 
 	Object(const std::string& filePath ,ObjectAttributes::Common* attributes = new ObjectAttributes::Common());
 
-	virtual void draw(Camera::Camera &camera) = 0;
+	virtual void draw(Camera::Camera &camera);
 	virtual void update(Camera::Camera& camera) = 0;
 
 	virtual ObjectAttributes::Common* getAttributes() const { 
@@ -54,8 +54,6 @@ public:
 	}
 
 	~Object() {
-		std::cout << "mesh to del: " << meshResourceKey << "\n";
-
 		ResourceManager::tryDeleteMesh(meshResourceKey);
 		ResourceManager::tryDeleteShader(shaderResourceKey);
 		//delete meshes;

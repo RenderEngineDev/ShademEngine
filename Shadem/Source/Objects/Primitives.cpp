@@ -29,18 +29,18 @@ void Primitives::Plane::setupMesh() {
 	this->meshes = std::make_shared<std::vector<Mesh>>(std::vector<Mesh>{ Mesh(vertices, indices, textures) });
 }
 
-void Primitives::Plane::draw(Camera::Camera &camera) {
-	this->shader->use();
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, attributes->position);
-	model = glm::scale(model, attributes->scale);
-	this->shader->setMat4("projection", camera.getProjection());
-	this->shader->setMat4("view", camera.getView());
-	this->shader->setMat4("model", model);
-
-	for(auto& mesh : *meshes)
-		mesh.Draw();
-}
+//void Primitives::Plane::draw(Camera::Camera &camera) {
+//	this->shader->use();
+//	glm::mat4 model = glm::mat4(1.0f);
+//	model = glm::translate(model, attributes->position);
+//	model = glm::scale(model, attributes->scale);
+//	this->shader->setMat4("projection", camera.getProjection());
+//	this->shader->setMat4("view", camera.getView());
+//	this->shader->setMat4("model", model);
+//
+//	for(auto& mesh : *meshes)
+//		mesh.Draw();
+//}
 
 void Primitives::Plane::update(Camera::Camera& camera) {
 
@@ -95,19 +95,19 @@ void Primitives::Cube::setupMesh() {
 	this->meshes = std::make_shared<std::vector<Mesh>>(std::vector<Mesh>{ Mesh(vertices, indices, textures) });
 }
 
-void Primitives::Cube::draw(Camera::Camera &camera) {
-	shader->use();
-	
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, attributes->position);
-	model = glm::scale(model, attributes->scale);
-	shader->setMat4("projection", camera.getProjection());
-	shader->setMat4("view", camera.getView());
-	shader->setMat4("model", model);
-
-	for(auto& mesh : *meshes)
-		mesh.Draw();
-}
+//void Primitives::Cube::draw(Camera::Camera &camera) {
+//	shader->use();
+//	
+//	glm::mat4 model = glm::mat4(1.0f);
+//	model = glm::translate(model, attributes->position);
+//	model = glm::scale(model, attributes->scale);
+//	shader->setMat4("projection", camera.getProjection());
+//	shader->setMat4("view", camera.getView());
+//	shader->setMat4("model", model);
+//
+//	for(auto& mesh : *meshes)
+//		mesh.Draw();
+//}
 
 void Primitives::Cube::update(Camera::Camera& camera) {
 
@@ -124,15 +124,7 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 {
 	shader->use();
 	
-	/*
-		definicje view przeniesc do kamery, aby mogla zwrocic sama rotacje bez przesuniecia
-	*/
-	glm::mat4 view = glm::mat4{glm::vec4(camera.right,0),
-					 glm::vec4(camera.up,   0),
-					 glm::vec4(camera.front,0),
-					 glm::vec4(camera.right,1) };
-
-	shader->setMat4("View", view);
+	shader->setMat4("View", camera.getRotation());
 	shader->setFloat("Zoom", camera.zoom);
 	shader->setVec3("CameraPos", camera.position);
 	shader->setVec2("CameraRange", camera.getRange());
@@ -141,9 +133,119 @@ void Primitives::RMSphere::draw(Camera::Camera& camera)
 	shader->setVec3("Scale", attributes->scale);
 
 	for(auto& mesh : *meshes)
-		mesh.Draw();
+		mesh.Draw(shader);
 }
 
 void Primitives::RMSphere::update(Camera::Camera& camera) {
 
+}
+
+Primitives::Cone::Cone(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
+{
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/cone.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+}
+
+//void Primitives::Cone::draw(Camera::Camera& camera)
+//{
+//	shader->use();
+//
+//	glm::mat4 model = glm::mat4(1.0f);
+//	model = glm::translate(model, attributes->position);
+//	model = glm::scale(model, attributes->scale);
+//	shader->setMat4("projection", camera.getProjection());
+//	shader->setMat4("view", camera.getView());
+//	shader->setMat4("model", model);
+//
+//	for (auto& mesh : *meshes)
+//		mesh.Draw();
+//}
+
+void Primitives::Cone::update(Camera::Camera& camera)
+{
+}
+
+void Primitives::Cone::setupMesh()
+{
+}
+
+Primitives::Torus::Torus(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
+{
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/torus.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+}
+
+void Primitives::Torus::update(Camera::Camera& camera)
+{
+}
+
+void Primitives::Torus::setupMesh()
+{
+}
+
+Primitives::Cylinder::Cylinder(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
+{
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/cylinder.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+}
+
+void Primitives::Cylinder::update(Camera::Camera& camera)
+{
+}
+
+void Primitives::Cylinder::setupMesh()
+{
+}
+
+Primitives::Sphere::Sphere(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
+{
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/sphere.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+}
+
+void Primitives::Sphere::update(Camera::Camera& camera)
+{
+}
+
+void Primitives::Sphere::setupMesh()
+{
+}
+
+Primitives::Circle::Circle(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath) : Object(attributes)
+{
+	auto shaderPair = ResourceManager::createOrGetShader(vertFilePath, fragFilePath);
+	this->shader = shaderPair.second;
+	this->setShaderResourceKey(shaderPair.first);
+
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Defalut_Resources/Models/circle.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+}
+
+void Primitives::Circle::update(Camera::Camera& camera)
+{
+}
+
+void Primitives::Circle::setupMesh()
+{
 }
