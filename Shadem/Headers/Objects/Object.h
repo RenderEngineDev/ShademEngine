@@ -44,8 +44,6 @@ public:
 	Object() {};
 	Object(ObjectAttributes::Common* attributes);
 
-	Object(const std::string& filePath ,ObjectAttributes::Common* attributes = new ObjectAttributes::Common());
-
 	virtual void draw(Camera::Camera &camera);
 	virtual void update(Camera::Camera& camera) = 0;
 

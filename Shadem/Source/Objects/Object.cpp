@@ -6,11 +6,6 @@ Object::Object(ObjectAttributes::Common* attributes) : attributes(attributes) {
 
 }
 
-Object::Object(const std::string& filePath, ObjectAttributes::Common* attributes)
-{
-
-}
-
 void Object::draw(Camera::Camera& camera)
 {
 	shader->use();
