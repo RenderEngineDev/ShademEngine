@@ -8,6 +8,9 @@ layout(triangle_strip, max_vertices = MAX_TRIANGLE_AMOUNT) out;
 
 in vec3[] FragPos;
 in vec2[] TextCoords;
+in vec4[] valuesL;
+in vec4[] valuesR;
+
 
 uniform float isoValue;
 uniform float frequency;

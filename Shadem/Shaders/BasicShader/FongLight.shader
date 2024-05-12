@@ -61,7 +61,7 @@ struct PointLight {
 	vec3 specular;
 };
 
-#define NR_POINT_LIGHTS 1
+#define NR_POINT_LIGHTS 4
 
 // zostawić tutaj te uniformy czy wrzucić do fragment shadera????
 uniform vec3 viewPos;

@@ -86,45 +86,29 @@ std::vector<std::vector<std::vector<float>>> GridGenerator::generate_nested_sphe
 std::vector<std::vector<std::vector<float>>> GridGenerator::generate_noise3D(float &frequency, float &amplitude, float &lacunarity, float &persistence, float &scale, glm::vec3 &offset, std::vector<std::vector<std::vector<float>>> &scalarFunction) {
 	SimplexNoise perlin(frequency, amplitude, lacunarity, persistence);
 	int i, j, k;
-	float octaves = 1.0f;
+	size_t octaves = 3;
 
 	#pragma omp parallel for private(i, j, k) collapse(3)
 	for (i = 0; i < (int)gridSize.x; i++) {
 		for (j = 0; j < (int)gridSize.y; j++) {
 			for (k = 0; k < (int)gridSize.z; k++) {
 				// Problem with high offset > gridSize
-				scalarFunction[i][j][k] = perlin.fractal(octaves, (i + offset.x * scale) / gridSize.x, (j + offset.y * scale) / gridSize.y, (k + offset.z * scale) / gridSize.z);
+				if (i == 0 || j == 0 || k == 0 || i == ((int)gridSize.x - 1) || j == ((int)gridSize.y - 1) || k == ((int)gridSize.z - 1)) {
+					scalarFunction[i][j][k] = 1.0f;
+				} else {
+					scalarFunction[i][j][k] = perlin.fractal(octaves, (i + offset.x * scale) / gridSize.x, (j + offset.y * scale) / gridSize.y, (k + offset.z * scale) / gridSize.z);
+				}
 			}
 		}
 	}
 
 	return scalarFunction;
 }
-
-std::vector<std::vector<std::vector<float>>> GridGenerator::generate_noise3DGEO(float &frequency, float &amplitude, float &lacunarity, float &persistence, float &scale, glm::vec3 &offset, std::vector<std::vector<std::vector<float>>> &scalarFunction) {
-	SimplexNoise perlin(frequency, amplitude, lacunarity, persistence);
-	int i, j, k;
-	float octaves = 1.0f;
-
-	#pragma omp parallel for private(i, j, k) collapse(3)
-	for (i = 0; i < (int)gridSize.x; i++) {
-		for (j = 0; j < (int)gridSize.y; j++) {
-			for (k = 0; k < (int)gridSize.z; k++) {
-				// Problem with high offset > gridSize
-				scalarFunction[i][j][k] = perlin.fractal(octaves, (i + offset.x * scale) / gridSize.x, (j + offset.y * scale) / gridSize.y, (k + offset.z * scale) / gridSize.z);
-			}
-		}
-	}
-
-	return scalarFunction;
-}
-
-
 
 std::vector<std::vector<std::vector<float>>> GridGenerator::generate_noise2D(float& frequency, float& amplitude, float& lacunarity, float& persistence, float& scale, glm::vec3& offset, std::vector<std::vector<std::vector<float>>>& scalarFunction) {
 	SimplexNoise perlin(frequency, amplitude, lacunarity, persistence);
 	int i, j, k;
-	size_t octaves = 2;
+	size_t octaves = 3;
 
 #pragma omp parallel for private(i, j, k) collapse(3)
 	for (i = 0; i < (int)gridSize.x; i++) {
@@ -132,11 +116,10 @@ std::vector<std::vector<std::vector<float>>> GridGenerator::generate_noise2D(flo
 			float amp = perlin.fractal(octaves, (i + offset.x * scale) / gridSize.x, (k + offset.z * scale) / gridSize.z);
 			amp = (amp + 1.0f) * (gridSize.y / 2);
 			for (j = 0; j < (int)gridSize.y; j++) {
-				if (j > amp) {
+				if (j > amp || i == 0 || j == 0 || k == 0 || i == ((int)gridSize.x - 1) || j == ((int)gridSize.y - 1) || k == ((int)gridSize.z - 1)) {
 					scalarFunction[i][j][k] = -1.0f;
-				}
-				else {
-					scalarFunction[i][j][k] = 1.0;
+				} else {
+					scalarFunction[i][j][k] = 1.0f;
 				}
 			}
 		}

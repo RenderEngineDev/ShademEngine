@@ -22,7 +22,6 @@ namespace MarchingCubeGenerator{
         std::vector<std::vector<std::vector<float>>> generate_nested_spheres();
         std::vector<std::vector<std::vector<float>>> generate_noise2D(float& frequency, float& amplitude, float& lacunarity, float& persistence, float& scale, glm::vec3& offset, std::vector<std::vector<std::vector<float>>>& scalarFunction);
         std::vector<std::vector<std::vector<float>>> generate_noise3D(float& frequency, float& amplitude, float& lacunarity, float& persistence, float& scale, glm::vec3& offset, std::vector<std::vector<std::vector<float>>>& scalarFunction);
-        std::vector<std::vector<std::vector<float>>> generate_noise3DGEO(float& frequency, float& amplitude, float& lacunarity, float& persistence, float& scale, glm::vec3& offset, std::vector<std::vector<std::vector<float>>>& scalarFunction);
         std::vector<std::vector<std::vector<float>>> read_grid_from_file(const char* path);
 
 

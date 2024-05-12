@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+
 #include "Scene/Scene.h"
 #include "Window/Controller.h"
 #include "Window/Window.h"
@@ -18,6 +20,8 @@ public:
 	// timing
 	static float lastFrame;
 	static float deltaTime;
+	//static float ttttime;
+	//static std::chrono::time_point<std::chrono::steady_clock> start;
 
 	ShademEngine();
 	~ShademEngine();

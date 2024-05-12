@@ -6,10 +6,12 @@
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
+ * + New implementation cnoise2d and cnoise3D
  */
 #pragma once
 
 #include <cstddef>  // size_t
+#include <glm/glm.hpp>
 
 /**
  * @brief A Perlin Simplex Noise C++ Implementation (1D, 2D, 3D, 4D).
@@ -22,6 +24,8 @@ public:
     static float noise(float x, float y);
     // 3D Perlin simplex noise
     static float noise(float x, float y, float z);
+    float cnoise(glm::vec3 P); // , float frequency, float amplitude, float persistence, float lacunarity
+    float cnoise(glm::vec2 P, float frequency, float amplitude, float persistence, float lacunarity);
 
     // Fractal/Fractional Brownian Motion (fBm) noise summation
     float fractal(size_t octaves, float x) const;

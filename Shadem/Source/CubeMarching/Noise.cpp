@@ -5,6 +5,8 @@
 
 using namespace CubeMarching;
 
+#include "ShademApplication/ShademEngine.h"
+
 Noise::Noise(ObjectAttributes::CubeMarching::Noise* attributes, std::initializer_list<const std::string> filePaths) : attributes(attributes), CmObject(attributes, filePaths) {	// TODO: do metody wrzuciæ
 	/*if (attributes->lodOn) {
 		glPatchParameteri(GL_PATCH_VERTICES, 3);
@@ -28,6 +30,12 @@ Noise3D::Noise3D(ObjectAttributes::CubeMarching::Noise* attributes, std::initial
 
 // TODO: swapowanie shaderów 
 NoiseGeometry::NoiseGeometry(ObjectAttributes::CubeMarching::Noise* attributes, std::initializer_list<const std::string> filePaths) : Noise(attributes, filePaths) {
+}
+NoiseGeometry2D::NoiseGeometry2D(ObjectAttributes::CubeMarching::Noise* attributes, std::initializer_list<const std::string> filePaths) : NoiseGeometry(attributes, filePaths) {
+	setupMesh();
+}
+NoiseGeometry3D::NoiseGeometry3D(ObjectAttributes::CubeMarching::Noise* attributes, std::initializer_list<const std::string> filePaths) : NoiseGeometry(attributes, filePaths) {
+	//ShademEngine::start = std::chrono::steady_clock::now();
 	setupMesh();
 }
 
@@ -133,7 +141,10 @@ void Noise2D::update(Camera::Camera& camera) {
 	if (isUpdated()) {
 		trianglesGenerator->triangulate_field(gridGenerator->generate_noise2D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction), getAttributes()->isoValue);
 		(*meshes)[0]->vertices = convertTrianglesToVertices(trianglesGenerator->triangles);
-		(*meshes)[0]->setupMeshWithouIndices();
+
+		glBindBuffer(GL_ARRAY_BUFFER, (*meshes)[0]->getVBO());
+		glBufferData(GL_ARRAY_BUFFER, (*meshes)[0]->vertices.size() * sizeof(Vertex), &(*meshes)[0]->vertices[0], GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		setUpdated(false);
 	}
 }
@@ -142,17 +153,66 @@ void Noise3D::update(Camera::Camera& camera) {
 	if (isUpdated()) {
 		trianglesGenerator->triangulate_field(gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction), getAttributes()->isoValue);
 		(*meshes)[0]->vertices = convertTrianglesToVertices(trianglesGenerator->triangles);
-		(*meshes)[0]->setupMeshWithouIndices();
+
+		glBindBuffer(GL_ARRAY_BUFFER, (*meshes)[0]->getVBO());
+		glBufferData(GL_ARRAY_BUFFER, (*meshes)[0]->vertices.size() * sizeof(Vertex), &(*meshes)[0]->vertices[0], GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		setUpdated(false);
 	}
 }
 
 void NoiseGeometry::update(Camera::Camera& camera) {
+}
+
+void NoiseGeometry3D::update(Camera::Camera& camera) {
 	if (isUpdated()) {
+		//scalarFunction = std::vector<std::vector<std::vector<float>>>(attributes->gridSize.x, std::vector<std::vector<float>>(attributes->gridSize.y, std::vector<float>(attributes->gridSize.z)));
+		//gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+		gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
 		(*meshes)[0]->vertices = calculateCellsFirstVertices();
-		(*meshes)[0]->setupMeshWithouIndices();
+		//attributes->frequency = (glm::sin(ShademEngine::ttttime++ / 10 * 3.14f / 180.0f) + 1.0f) * 7.0f;
+		//(*meshes)[0]->setupMeshWithouIndicesTemp();
+		//bindCellsValuesVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, (*meshes)[0]->getVBO());
+		glBufferData(GL_ARRAY_BUFFER, (*meshes)[0]->vertices.size() * sizeof(Vertex), &(*meshes)[0]->vertices[0], GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, cellValuesVBO);
+		glBufferData(GL_ARRAY_BUFFER, cellsValues.size() * sizeof(GridCellValues), &cellsValues[0], GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		setUpdated(false);
 	}
+}
+
+void NoiseGeometry2D::update(Camera::Camera& camera) {
+	if (isUpdated()) {
+		//scalarFunction = std::vector<std::vector<std::vector<float>>>(attributes->gridSize.x, std::vector<std::vector<float>>(attributes->gridSize.y, std::vector<float>(attributes->gridSize.z)));
+		//gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+		gridGenerator->generate_noise2D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+		(*meshes)[0]->vertices = calculateCellsFirstVertices();
+		//(*meshes)[0]->setupMeshWithouIndicesTemp();
+		//bindCellsValuesVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, (*meshes)[0]->getVBO());
+		glBufferData(GL_ARRAY_BUFFER, (*meshes)[0]->vertices.size() * sizeof(Vertex), &(*meshes)[0]->vertices[0], GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, cellValuesVBO);
+		glBufferData(GL_ARRAY_BUFFER, cellsValues.size() * sizeof(GridCellValues), &cellsValues[0], GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		setUpdated(false);
+	}
+}
+
+void CubeMarching::NoiseGeometry::bindCellsValuesVBO()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, cellValuesVBO);
+	glBufferData(GL_ARRAY_BUFFER, cellsValues.size() * sizeof(GridCellValues), &cellsValues[0], GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(GridCellValues), (void*)0);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(GridCellValues), (void*)offsetof(GridCellValues, valuesR));
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 
@@ -173,9 +233,34 @@ void Noise3D::setupMesh() {
 	meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(convertTrianglesToVertices(trianglesGenerator->triangles), std::vector<std::shared_ptr<Texture>>{})});
 }
 
-void NoiseGeometry::setupMesh() {
+void NoiseGeometry2D::setupMesh() {
 	initGenerators();
-	meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(calculateCellsFirstVertices(), std::vector<std::shared_ptr<Texture>>{})});
+	//gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+	gridGenerator->generate_noise2D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+	//meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(calculateCellsFirstVertices(), std::vector<std::shared_ptr<Texture>>{})});
+
+	glGenBuffers(1, &cellValuesVBO);
+	std::vector<Vertex> vertices = calculateCellsFirstVertices();
+
+	meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(vertices)});
+	(*meshes)[0]->setupMeshWithouIndicesTemp();
+	bindCellsValuesVBO();
+
+}
+
+void NoiseGeometry3D::setupMesh() {
+	initGenerators();
+	//gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+	gridGenerator->generate_noise3D(getAttributes()->frequency, getAttributes()->amplitude, getAttributes()->lacunarity, getAttributes()->persistence, getAttributes()->noiseScale, getAttributes()->offset, scalarFunction);
+	//meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(calculateCellsFirstVertices(), std::vector<std::shared_ptr<Texture>>{})});
+
+	glGenBuffers(1, &cellValuesVBO);
+	std::vector<Vertex> vertices = calculateCellsFirstVertices();
+
+	meshes = std::make_shared<std::vector<Mesh*>>(std::vector<Mesh*>{new Mesh(vertices)});
+	(*meshes)[0]->setupMeshWithouIndicesTemp();
+	bindCellsValuesVBO();
+
 }
 
 void Noise3DCompute::setupMesh() {
@@ -190,6 +275,7 @@ void Noise3DCompute::setupMesh() {
 
 std::vector<Vertex> Noise::calculateCellsFirstVertices() {
 	std::vector<Vertex> vertices;
+	cellsValues.clear();
 	glm::ivec3 igridSize = attributes->gridSize;
 	for (int i = 0; i < (igridSize.x - 1); i++) {
 		for (int j = 0; j < (igridSize.y - 1); j++) {
@@ -197,7 +283,30 @@ std::vector<Vertex> Noise::calculateCellsFirstVertices() {
 				float	x = i / attributes->gridSize.x - 0.5f, 
 						y = j / attributes->gridSize.y - 0.5f, 
 						z = k / attributes->gridSize.z - 0.5f;
-				vertices.emplace_back(Vertex(glm::vec3(x, y, z)));
+				int cubeIndex = 0;
+				cubeIndex |= ((scalarFunction[i][j][k] < attributes->isoValue ? 1 : 0) << 0);
+				cubeIndex |= ((scalarFunction[i+1][j][k] < attributes->isoValue ? 1 : 0) << 1);
+				cubeIndex |= ((scalarFunction[i+1][j][k+1] < attributes->isoValue ? 1 : 0) << 2);
+				cubeIndex |= ((scalarFunction[i][j][k+1] < attributes->isoValue ? 1 : 0) << 3);
+				cubeIndex |= ((scalarFunction[i][j+1][k] < attributes->isoValue ? 1 : 0) << 4);
+				cubeIndex |= ((scalarFunction[i+1][j+1][k] < attributes->isoValue ? 1 : 0) << 5);
+				cubeIndex |= ((scalarFunction[i+1][j+1][k+1] < attributes->isoValue ? 1 : 0) << 6);
+				cubeIndex |= ((scalarFunction[i][j+1][k+1] < attributes->isoValue ? 1 : 0) << 7);
+
+				if ((cubeIndex != 0) && (cubeIndex != 255)) {
+					vertices.emplace_back(Vertex(glm::vec3(x, y, z)));
+					cellsValues.push_back({
+						glm::vec4(scalarFunction[i][j][k],
+							scalarFunction[i + 1][j][k],
+							scalarFunction[i + 1][j][k + 1],
+							scalarFunction[i][j][k + 1]),
+						glm::vec4(scalarFunction[i][j + 1][k],
+							scalarFunction[i + 1][j + 1][k],
+							scalarFunction[i + 1][j + 1][k + 1],
+							scalarFunction[i][j + 1][k + 1])
+						});
+				}
+				//vertices.emplace_back(Vertex(glm::vec3(x, y, z)));
 			}
 		}
 	};

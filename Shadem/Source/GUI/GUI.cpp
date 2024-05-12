@@ -78,10 +78,9 @@ void GUI::handleObjectSelection(T* selectedObject) {
 	ImGui::InputFloat3("Rotation", &selectedObject->getAttributes()->rotation.x);
 	
 	// Sprawdü typ obiektu i wykonaj dynamiczne rzutowanie
-	if (typeid(*selectedObject) == typeid(CubeMarching::Noise2D) || 
-		typeid(*selectedObject) == typeid(CubeMarching::Noise3D) || 
-		typeid(*selectedObject) == typeid(CubeMarching::NoiseGeometry)) {
-		handleOtherAttributesSelection(dynamic_cast<CubeMarching::Noise*>(selectedObject));
+	//if (typeid(selectedObject->getAttributes()) == typeid(ObjectAttributes::CubeMarching::Noise)) {
+	if (CubeMarching::Noise * noise = dynamic_cast<CubeMarching::Noise*>(selectedObject)) {
+		handleOtherAttributesSelection(noise);
 	}
 	else if (typeid(*selectedObject) == typeid(CubeMarching::Sphere)) {
 		handleOtherAttributesSelection(dynamic_cast<CubeMarching::Sphere*>(selectedObject));
@@ -121,6 +120,7 @@ void GUI::draw(Scene *scene) {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+#include "ShademApplication/ShademEngine.h"
 void GUI::drawMainMenu() {
 	ImGuiIO io = ImGui::GetIO();
 	ImGui::Begin("Shadem menu");
@@ -129,4 +129,17 @@ void GUI::drawMainMenu() {
 	ImGui::Checkbox("Scene Menu Window", &showSceneMenu);
 	ImGui::Text("(%.1f FPS)", io.Framerate);
 	ImGui::End();
+
+	//if (ShademEngine::ttttime != 0) {
+	//	std::ofstream file;
+	//	file.open("CM3D_GPU_GRID_80.txt", std::ios_base::app);
+	//	if (!file) {
+	//		std::cerr << "Nie moøna otworzyÊ pliku: " << "CM3D_GPU_GRID_80.txt" << std::endl;
+	//		return;
+	//	}
+	//	long elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - ShademEngine::start).count();
+	//	file << elapsed << " " << (glm::sin(ShademEngine::ttttime/10 * 3.14f / 180.0f) + 1.0f) * 7.0f << " " << io.Framerate << std::endl;
+	//	file.close();
+	//	//std::cout << elapsed << "\n";
+	//}
 }

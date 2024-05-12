@@ -473,3 +473,168 @@ float SimplexNoise::fractal(size_t octaves, float x, float y, float z) const {
 
     return (output / denom);
 }
+
+
+#include <glm/glm.hpp>
+#include <glm/gtc/noise.hpp>
+#include <glm/gtc/constants.hpp>
+#include <iostream>
+#include <cmath>
+
+using namespace glm;
+
+float mod289(float x) {
+    return x - floor(x * (1.0f / 289.0f)) * 289.0f;
+}
+
+vec4 mod289(vec4 x) {
+    return x - floor(x * (1.0f / 289.0f)) * 289.0f;
+}
+
+vec4 permute(vec4 x) {
+    return mod289(((x * 34.0f) + 1.0f) * x);
+}
+
+vec2 fade(vec2 t) {
+    return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
+}
+
+vec3 fade(vec3 t) {
+    return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
+}
+
+vec4 taylorInvSqrt(vec4 r) {
+    return 1.79284291400159f - 0.85373472095314f * r;
+}
+
+float cnoise2D(vec2 P) {
+    vec4 Pi = floor(vec4(P.x, P.y, P.x, P.y)) + vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    vec4 Pf = fract(vec4(P.x, P.y, P.x, P.y)) - vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    Pi = mod289(Pi);
+    vec4 ix = vec4(Pi.x, Pi.z, Pi.x, Pi.z);
+    vec4 iy = vec4(Pi.y, Pi.y, Pi.w, Pi.w);
+    vec4 fx = vec4(Pi.x, Pi.z, Pi.x, Pi.z);
+    vec4 fy = vec4(Pi.y, Pi.y, Pi.w, Pi.w);
+    vec4 i = permute(permute(ix) + iy);
+    vec4 gx = 2.0f * fract(i * 0.0243902439f) - 1.0f;
+    vec4 gy = abs(gx) - 0.5f;
+    vec4 tx = floor(gx + 0.5f);
+    gx = gx - tx;
+    vec2 g00 = vec2(gx.x, gy.x);
+    vec2 g10 = vec2(gx.y, gy.y);
+    vec2 g01 = vec2(gx.z, gy.z);
+    vec2 g11 = vec2(gx.w, gy.w);
+    vec4 norm = taylorInvSqrt(vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11)));
+    g00 *= norm.x;
+    g01 *= norm.y;
+    g10 *= norm.z;
+    g11 *= norm.w;
+    float n00 = dot(g00, vec2(fx.x, fy.x));
+    float n10 = dot(g10, vec2(fx.y, fy.y));
+    float n01 = dot(g01, vec2(fx.z, fy.z));
+    float n11 = dot(g11, vec2(fx.w, fy.w));
+    vec2 fade_xy = fade(vec2(Pf.x, Pf.y));
+    vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+    float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
+    return 2.3f * n_xy;
+}
+
+float cnoise3D(vec3 P) {
+    vec3 Pi0 = floor(P);
+    vec3 Pi1 = Pi0 + vec3(1.0f);
+    Pi0 = mod(Pi0, vec3(289.0f));
+    Pi1 = mod(Pi1, vec3(289.0f));
+    vec3 Pf0 = fract(P);
+    vec3 Pf1 = Pf0 - vec3(1.0f);
+    vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+    vec4 iy = vec4(Pi0.y, Pi1.y, Pi0.y, Pi1.y);
+    vec4 iz0 = vec4(Pi0.z);
+    vec4 iz1 = vec4(Pi1.z);
+
+    vec4 ixy = permute(permute(ix) + iy);
+    vec4 ixy0 = permute(ixy + iz0);
+    vec4 ixy1 = permute(ixy + iz1);
+
+    vec4 gx0 = fract(ixy0 * (1.0f / 41.0f)) * 2.0f - 1.0f;
+    vec4 gy0 = abs(gx0) - 0.5f;
+    vec4 gz0 = vec4(0.5f) - abs(gx0) - abs(gy0);
+    vec4 sz0 = step(gz0, vec4(0.0f));
+    gx0 -= sz0 * (step(0.0f, gx0) - 0.5f);
+    gy0 -= sz0 * (step(0.0f, gy0) - 0.5f);
+
+    vec4 gx1 = fract(ixy1 * (1.0f / 41.0f)) * 2.0f - 1.0f;
+    vec4 gy1 = abs(gx1) - 0.5f;
+    vec4 gz1 = vec4(0.5f) - abs(gx1) - abs(gy1);
+    vec4 sz1 = step(gz1, vec4(0.0f));
+    gx1 -= sz1 * (step(0.0f, gx1) - 0.5f);
+    gy1 -= sz1 * (step(0.0f, gy1) - 0.5f);
+
+    vec3 g000 = vec3(gx0.x, gy0.x, gz0.x);
+    vec3 g100 = vec3(gx0.y, gy0.y, gz0.y);
+    vec3 g010 = vec3(gx0.z, gy0.z, gz0.z);
+    vec3 g110 = vec3(gx0.w, gy0.w, gz0.w);
+    vec3 g001 = vec3(gx1.x, gy1.x, gz1.x);
+    vec3 g101 = vec3(gx1.y, gy1.y, gz1.y);
+    vec3 g011 = vec3(gx1.z, gy1.z, gz1.z);
+    vec3 g111 = vec3(gx1.w, gy1.w, gz1.w);
+
+    vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+    g000 *= norm0.x;
+    g010 *= norm0.y;
+    g100 *= norm0.z;
+    g110 *= norm0.w;
+    vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+    g001 *= norm1.x;
+    g011 *= norm1.y;
+    g101 *= norm1.z;
+    g111 *= norm1.w;
+
+    float n000 = dot(g000, Pf0);
+    float n100 = dot(g100, vec3(Pf1.x, Pf0.y, Pf0.z));
+    float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+    float n110 = dot(g110, vec3(Pf1.x, Pf1.y, Pf0.z));
+    float n001 = dot(g001, vec3(Pf0.x, Pf0.y, Pf1.z));
+    float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+    float n011 = dot(g011, vec3(Pf0.x, Pf1.y, Pf1.z));
+    float n111 = dot(g111, Pf1);
+
+    vec3 fade_xyz = fade(Pf0);
+    vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+    vec2 n_yz = mix(vec2(n_z.x, n_z.y), vec2(n_z.z, n_z.w), fade_xyz.y);
+    float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
+    return 2.2f * n_xyz;
+}
+
+float SimplexNoise::cnoise(vec3 P) {
+    //, float frequency, float amplitude, float persistence, float lacunarity
+    float total = 0.0f;
+    float maxAmplitude = 0.1f;
+    float amplitudeF = mAmplitude;
+    float frequencyF = mFrequency;
+    float octaves = 1.0f;
+
+    for (int i = 0; i < octaves; i++) {
+        total += cnoise3D(P * frequencyF) * amplitudeF;
+        maxAmplitude += amplitudeF;
+        amplitudeF *= mPersistence;
+        frequencyF *= mLacunarity;
+    }
+
+    return total / maxAmplitude;
+}
+
+float SimplexNoise::cnoise(vec2 P, float frequency, float amplitude, float persistence, float lacunarity) {
+    float total = 0.0f;
+    float maxAmplitude = 0.1f;
+    float amplitudeF = amplitude;
+    float frequencyF = frequency;
+
+    for (int i = 0; i < 2; i++) {
+        total += cnoise2D(P * frequencyF) * amplitudeF;
+        maxAmplitude += amplitudeF;
+        amplitudeF *= persistence;
+        frequencyF *= lacunarity;
+    }
+
+    return total / maxAmplitude;
+}

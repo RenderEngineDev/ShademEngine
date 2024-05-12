@@ -271,6 +271,7 @@ void Shader::compileShaders(const char* computePath)
 	unsigned int compute;
 	// compute Shader
 	compute = glCreateShader(GL_COMPUTE_SHADER);
+	computeCode = processDirectives(computeCode);
 	compileShader(compute, computeCode);
 	checkCompileErrors(compute, "COMPUTE");
 
@@ -287,7 +288,7 @@ void Shader::compileShaders(const char* computePath)
 //Shorthand for dispatch compute with some default parameter values
 void Shader::dispatch(unsigned int x, unsigned int y, unsigned int z) const {
 	glDispatchCompute(x, y, z);
-	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT); // Ensure correct ordering of operations
 }
 
 void Shader::use()

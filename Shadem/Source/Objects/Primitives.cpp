@@ -5,7 +5,7 @@ Primitives::Plane::Plane(ObjectAttributes::Common* attributes, const std::string
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
 
-	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/plane.obj");
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/plane.fbx");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 
@@ -118,7 +118,6 @@ Primitives::Cone::Cone(ObjectAttributes::Common* attributes, const std::string& 
 	auto shaderPair = ResourceManager::createOrGetShader({vertFilePath, fragFilePath});
 	this->shader = shaderPair.second;
 	this->setShaderResourceKey(shaderPair.first);
-
 	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/cone.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);

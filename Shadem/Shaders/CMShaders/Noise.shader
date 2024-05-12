@@ -202,4 +202,4 @@ float cnoise(in const vec2 P, in const float frequency, in const float amplitude
 }
 
 
-#endif NOISE_SHADER
+#endif

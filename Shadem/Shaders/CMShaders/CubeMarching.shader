@@ -51,14 +51,28 @@ vec3[MAX_TRIANGLE_AMOUNT] getIntersectionCoordinates(in const GridCell cell, in 
     int idx = 0;
     // BEZ PETLI +80FPS
     
-#pragma FOR_LOOP(12)
-if (intersectionsKey & 1) {
-int v1 = edgeToVertices[i][0], v2 = edgeToVertices[i][1];
-vec3 intersectionvec3 = interpolate(cell.vertex[v1], cell.value[v1], cell.vertex[v2], cell.value[v2], isoValue);
-intersections[i] = intersectionvec3;}
-intersectionsKey >>= 1;
-if (intersectionsKey == 0) return intersections;
-#pragma END_FOR_LOOP
+//#pragma FOR_LOOP(12)
+//if (intersectionsKey & 1) {
+//int v1 = edgeToVertices[i][0], v2 = edgeToVertices[i][1];
+//vec3 intersectionvec3 = interpolate(cell.vertex[v1], cell.value[v1], cell.vertex[v2], cell.value[v2], isoValue);
+//intersections[i] = intersectionvec3;}
+//intersectionsKey >>= 1;
+//if (intersectionsKey == 0) return intersections;
+//#pragma END_FOR_LOOP
+    intersections[0] = interpolate(cell.vertex[edgeToVertices[0][0]], cell.value[edgeToVertices[0][0]], cell.vertex[edgeToVertices[0][1]], cell.value[edgeToVertices[0][1]], isoValue);
+    intersections[1] = interpolate(cell.vertex[edgeToVertices[1][0]], cell.value[edgeToVertices[1][0]], cell.vertex[edgeToVertices[1][1]], cell.value[edgeToVertices[1][1]], isoValue);
+    intersections[2] = interpolate(cell.vertex[edgeToVertices[2][0]], cell.value[edgeToVertices[2][0]], cell.vertex[edgeToVertices[2][1]], cell.value[edgeToVertices[2][1]], isoValue);
+    intersections[3] = interpolate(cell.vertex[edgeToVertices[3][0]], cell.value[edgeToVertices[3][0]], cell.vertex[edgeToVertices[3][1]], cell.value[edgeToVertices[3][1]], isoValue);
+    intersections[4] = interpolate(cell.vertex[edgeToVertices[4][0]], cell.value[edgeToVertices[4][0]], cell.vertex[edgeToVertices[4][1]], cell.value[edgeToVertices[4][1]], isoValue);
+    intersections[5] = interpolate(cell.vertex[edgeToVertices[5][0]], cell.value[edgeToVertices[5][0]], cell.vertex[edgeToVertices[5][1]], cell.value[edgeToVertices[5][1]], isoValue);
+    intersections[6] = interpolate(cell.vertex[edgeToVertices[6][0]], cell.value[edgeToVertices[6][0]], cell.vertex[edgeToVertices[6][1]], cell.value[edgeToVertices[6][1]], isoValue);
+    intersections[7] = interpolate(cell.vertex[edgeToVertices[7][0]], cell.value[edgeToVertices[7][0]], cell.vertex[edgeToVertices[7][1]], cell.value[edgeToVertices[7][1]], isoValue);
+    intersections[8] = interpolate(cell.vertex[edgeToVertices[8][0]], cell.value[edgeToVertices[8][0]], cell.vertex[edgeToVertices[8][1]], cell.value[edgeToVertices[8][1]], isoValue);
+    intersections[9] = interpolate(cell.vertex[edgeToVertices[9][0]], cell.value[edgeToVertices[9][0]], cell.vertex[edgeToVertices[9][1]], cell.value[edgeToVertices[9][1]], isoValue);
+    intersections[10] = interpolate(cell.vertex[edgeToVertices[10][0]], cell.value[edgeToVertices[10][0]], cell.vertex[edgeToVertices[10][1]], cell.value[edgeToVertices[10][1]], isoValue);
+    intersections[11] = interpolate(cell.vertex[edgeToVertices[11][0]], cell.value[edgeToVertices[11][0]], cell.vertex[edgeToVertices[11][1]], cell.value[edgeToVertices[11][1]], isoValue);
+    
+
     return intersections;
 }
 
@@ -87,14 +101,14 @@ GridCell calculateCellValuesForNoise3D(in const vec3 offset, in const float nois
     cell.vertex[5] = vec3(xo, yo, z);
     cell.vertex[6] = vec3(xo, yo, zo);
     cell.vertex[7] = vec3(x,  yo, zo);
-    cell.value[0] = cnoise(vec3(nX,     nY,     nZ),    frequency, amplitude, persistence, lacunarity);
-    cell.value[1] = cnoise(vec3(nXo,    nY,     nZ),    frequency, amplitude, persistence, lacunarity);
-    cell.value[2] = cnoise(vec3(nXo,    nY,     nZo),   frequency, amplitude, persistence, lacunarity);
-    cell.value[3] = cnoise(vec3(nX,     nY,     nZo),   frequency, amplitude, persistence, lacunarity);
-    cell.value[4] = cnoise(vec3(nX,     nYo,    nZ),    frequency, amplitude, persistence, lacunarity);
-    cell.value[5] = cnoise(vec3(nXo,    nYo,    nZ),    frequency, amplitude, persistence, lacunarity);
-    cell.value[6] = cnoise(vec3(nXo,    nYo,    nZo),   frequency, amplitude, persistence, lacunarity);
-    cell.value[7] = cnoise(vec3(nX,     nYo,    nZo),   frequency, amplitude, persistence, lacunarity);
+    cell.value[0] = valuesL[0].x; // cnoise(vec3(nX,     nY,     nZ),    frequency, amplitude, persistence, lacunarity);
+    cell.value[1] = valuesL[0].y; // cnoise(vec3(nXo,    nY,     nZ),    frequency, amplitude, persistence, lacunarity);
+    cell.value[2] = valuesL[0].z; // cnoise(vec3(nXo,    nY,     nZo),   frequency, amplitude, persistence, lacunarity);
+    cell.value[3] = valuesL[0].w; // cnoise(vec3(nX,     nY,     nZo),   frequency, amplitude, persistence, lacunarity);
+    cell.value[4] = valuesR[0].x; // cnoise(vec3(nX,     nYo,    nZ),    frequency, amplitude, persistence, lacunarity);
+    cell.value[5] = valuesR[0].y; // cnoise(vec3(nXo,    nYo,    nZ),    frequency, amplitude, persistence, lacunarity);
+    cell.value[6] = valuesR[0].z; // cnoise(vec3(nXo,    nYo,    nZo),   frequency, amplitude, persistence, lacunarity);
+    cell.value[7] = valuesR[0].w; // cnoise(vec3(nX,     nYo,    nZo),   frequency, amplitude, persistence, lacunarity);
 
    
     return cell;
@@ -128,14 +142,14 @@ GridCell calculateCellValuesForNoise2D(in const vec3 offset, in const float nois
     cell.vertex[5] = vec3(x + cvOffset.x, y + cvOffset.y, z);
     cell.vertex[6] = vec3(x + cvOffset.x, y + cvOffset.y, z + cvOffset.z);
     cell.vertex[7] = vec3(x, y + cvOffset.y, z + cvOffset.z);
-    cell.value[0] = getNoise2Value(cnoise(vec2(nX, nZ), frequency, amplitude, persistence, lacunarity), nY);
-    cell.value[1] = getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ), frequency, amplitude, persistence, lacunarity), nY);
-    cell.value[2] = getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY);
-    cell.value[3] = getNoise2Value(cnoise(vec2(nX, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY);
-    cell.value[4] = getNoise2Value(cnoise(vec2(nX, nZ), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
-    cell.value[5] = getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
-    cell.value[6] = getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
-    cell.value[7] = getNoise2Value(cnoise(vec2(nX, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
+    cell.value[0] = valuesL[0].x; // getNoise2Value(cnoise(vec2(nX, nZ), frequency, amplitude, persistence, lacunarity), nY);
+    cell.value[1] = valuesL[0].y; // getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ), frequency, amplitude, persistence, lacunarity), nY);
+    cell.value[2] = valuesL[0].z; // getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY);
+    cell.value[3] = valuesL[0].w; // getNoise2Value(cnoise(vec2(nX, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY);
+    cell.value[4] = valuesR[0].x; // getNoise2Value(cnoise(vec2(nX, nZ), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
+    cell.value[5] = valuesR[0].y; // getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
+    cell.value[6] = valuesR[0].z; // getNoise2Value(cnoise(vec2(nX + cvOffset.x, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
+    cell.value[7] = valuesR[0].w; // getNoise2Value(cnoise(vec2(nX, nZ + cvOffset.z), frequency, amplitude, persistence, lacunarity), nY + cvOffset.y);
 
     return cell;
 }

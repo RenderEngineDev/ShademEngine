@@ -28,6 +28,7 @@ struct Vertex {
 	Vertex(glm::vec3 position, glm::vec3 normal, glm::vec2 texCoords, glm::vec3 tangent, glm::vec3 bitangent) : position(position), normal(normal), tangent(tangent), bitangent(bitangent) {};
 	Vertex(glm::vec3 position, glm::vec3 normal) : position(position), normal(normal) {};
 	Vertex(glm::vec3 position) : position(position) {};
+	//Vertex(glm::vec3 position, glm::vec4 valuesL, glm::vec4 valuesR) : position(position), valuesL(valuesL) , valuesR(valuesR) {};
 };
 
 struct Texture 
@@ -56,6 +57,7 @@ public:
 	Mesh();
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
 	Mesh(std::vector<Vertex> vertices, std::vector<std::shared_ptr<Texture>> textures);
+	Mesh(std::vector<Vertex> vertices);
 
 	void Draw(std::shared_ptr<Shader>& shader);
 	void DrawEdges(std::shared_ptr<Shader>& shader);
@@ -63,6 +65,7 @@ public:
 	void DrawPatches();
 	void DrawRectangleForComputeShader();
 	void DrawGeoPointsCM();
+	void DrawGeoIntanced(const int& count);
 	void DrawInstanced(std::shared_ptr<Shader>& shader, int instanceCount);
 
 	unsigned int getVAO() const;
@@ -72,6 +75,7 @@ public:
 	void setupMesh();
 
 	void setupMeshWithouIndices();
+	void setupMeshWithouIndicesTemp();
 
 	~Mesh();
 

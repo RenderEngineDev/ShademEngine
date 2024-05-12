@@ -5,6 +5,7 @@
 
 Mesh::Mesh()
 {
+	GenBuffers();
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures)
@@ -14,7 +15,6 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 	this->textures = textures;
 
 	GenBuffers();
-
 	setupMesh();
 }
 
@@ -24,8 +24,14 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<std::shared_ptr<Texture>> t
 	this->textures = textures;
 
 	GenBuffers();
-
 	setupMeshWithouIndices();
+}
+
+Mesh::Mesh(std::vector<Vertex> vertices) {
+	this->vertices = vertices;
+
+	GenBuffers();
+	//setupMeshWithouIndicesTemp();
 }
 
 void Mesh::setupMesh()
@@ -71,6 +77,40 @@ void Mesh::setupMeshWithouIndices()
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 		glBindVertexArray(0);
 	} else {
+		std::cout << "WARNING: Binding BufferData of mesh failed: vertices are empty" << std::endl;
+	}
+}
+
+void checkGLError(const char* stmt, const char* fname, int line) {
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR) {
+		std::cerr << "OpenGL error " << err << " at " << fname << ":" << line << " for " << stmt << std::endl;
+	}
+}
+
+#define GL_CHECK(stmt) do { \
+    stmt; \
+    checkGLError(#stmt, __FILE__, __LINE__); \
+} while (0)
+
+void Mesh::setupMeshWithouIndicesTemp()
+{
+	if (!vertices.empty()) {
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_DYNAMIC_DRAW);
+		// vertex positions	
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		// vertex normals
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+		// vertex texture coords
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+		//glBindVertexArray(0);
+	}
+	else {
 		std::cout << "WARNING: Binding BufferData of mesh failed: vertices are empty" << std::endl;
 	}
 }

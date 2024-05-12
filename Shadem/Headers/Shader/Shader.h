@@ -50,6 +50,26 @@ namespace Shaders {
 		return "../Shadem/Shaders/ComputeShader/Fshader.shader";
 	}
 
+	static const char* getSphSystemComputeShaderPath() {
+		return "../Shadem/Shaders/ComputeShader/CSphShader.shader";
+	}
+	static const char* getSphScalarsComputeShaderPath() {
+		return "../Shadem/Shaders/ComputeShader/CSphScalarsShader.shader";
+	}
+	static const char* getSphNewScalarsComputeShaderPath() {
+		return "../Shadem/Shaders/ComputeShader/CSphNewScalarsShader.shader";
+	}
+
+	static const char* getSphDensityComputeShaderPath() {
+		return "../Shadem/Shaders/ComputeShader/CSphDensity.shader";
+	}
+	static const char* getSphForcesComputeShaderPath() {
+		return "../Shadem/Shaders/ComputeShader/CSphForces.shader";
+	}
+	static const char* getSphParticlesComputeShaderPath() {
+		return "../Shadem/Shaders/ComputeShader/CSphParticles.shader";
+	}
+
 	static const char* getCMFragmentShaderPath() {
 		return "../Shadem/Shaders/CMShaders/FshaderCM.shader";
 	}

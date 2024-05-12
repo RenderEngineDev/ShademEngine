@@ -54,6 +54,7 @@ namespace ObjectTypes {
             NOISE_2D_GEOMETRY,
             NOISE_3D_GEOMETRY,
             NOISE_3D_COMPUTE,
+            SPH_COMPUTE,
             // ... 
         };
 
