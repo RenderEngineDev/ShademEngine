@@ -25,3 +25,11 @@ void Object::evaluateBasicModelTransformations(glm::mat4& model) {
 	model = glm::rotate(model, glm::radians(attributes->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::scale(model, attributes->scale);
 }
+
+void Object::evaluateBasicModelTransformations(glm::mat4& model, ObjectAttributes::Common* attributes) {
+	model = glm::translate(model, attributes->position);
+	model = glm::rotate(model, glm::radians(attributes->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(attributes->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(attributes->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::scale(model, attributes->scale);
+}

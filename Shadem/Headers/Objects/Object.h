@@ -41,7 +41,7 @@ private:
 
 public:
 
-	Object() {};
+	Object():attributes(new ObjectAttributes::Common()) {};
 	Object(ObjectAttributes::Common* attributes);
 
 	virtual void draw(Camera::Camera &camera);
@@ -65,7 +65,11 @@ public:
 
 	void setMeshResourceKey(const std::string& key) { meshResourceKey = key; }
 	void setShaderResourceKey(const std::string& key) { shaderResourceKey = key; }
+	
+	const std::string& getMeshResourceKey() const { return meshResourceKey; };
+	const std::string& getShaderResourceKey() const { return shaderResourceKey; };
 
 protected:
 	void evaluateBasicModelTransformations(glm::mat4& model);
+	void evaluateBasicModelTransformations(glm::mat4& model, ObjectAttributes::Common* attributes);
 };
