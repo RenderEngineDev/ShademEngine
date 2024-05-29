@@ -63,6 +63,7 @@ public:
 	void DrawPatches();
 	void DrawRectangleForComputeShader();
 	void DrawGeoPointsCM();
+	void DrawInstanced(std::shared_ptr<Shader>& shader, int instanceCount);
 
 	unsigned int getVAO() const;
 	unsigned int getVBO() const;

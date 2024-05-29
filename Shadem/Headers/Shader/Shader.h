@@ -19,6 +19,13 @@ namespace Shaders {
 		return "../Shadem/Shaders/BasicShader/Vshader.shader";
 	}
 
+	static const char* getCommonInstanceFragmentShaderPath() {
+		return "../Shadem/Shaders/BasicShader/InstanceFshader.shader";
+	}
+	static const char* getCommonInstanceVertexShaderPath() {
+		return "../Shadem/Shaders/BasicShader/InstanceVshader.shader";
+	}
+
 	static const char* getRmSphereFragmentShaderPath() {
 		return "../Shadem/Shaders/RMShaders/SphereFshader.shader";
 	}
