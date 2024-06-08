@@ -8,19 +8,38 @@ in vec3 FragPos;
 
 uniform vec3 Scale;
 uniform vec3 SpherePos;
+uniform float ballScale;
+
+uniform int N;
+layout(binding = 0) buffer fparticle { vec4 p []; };
 
 float total_distance_traveled = 0.0;
 const int NUMBER_OF_STEPS = 64;
 int i = 0;
 
+float sMin(float a, float b, float k) {
+  float h = clamp(0.5 + 0.5 * (a - b) / k, 0.0, 1.0);
+  return mix(a, b, h) - k * h * (1.0 - h);
+}
+
 float distance_from_sphere(in vec3 point, in vec3 center, float radius)
 {
-    return length(point - center ) - length(radius * Scale);
+    return length(point - center ) - length(radius * Scale * ballScale);
 }
 
 float map_the_world(in vec3 point)
 {
-    float sphere = float(distance_from_sphere(point, SpherePos, 1.0) );
+    float sphere = distance_from_sphere(point, vec3(p[0])*Scale, 1.0f);
+    float tmp = 0.0f;
+    for(int k=1; k<N; k++)
+    {
+        tmp = distance_from_sphere(point, vec3(p[k])*Scale, 1.0f);
+        if(sphere > tmp)
+        {
+            sphere = tmp;
+        }
+        //sphere = sMin(sphere, tmp, 0.3f);
+    }
 
     return sphere;
 }
@@ -56,7 +75,7 @@ vec4 ray_march(in vec3 rayOrigin, in vec3 rayDirection)
 
             float diffuse_intensity = max(0.0, dot(normal, direction_to_light));
             
-            return vec4(vec3(1, 0, 0) * diffuse_intensity, 1.0);
+            return vec4(vec3(1, 1, 1) * diffuse_intensity, 1.0);
         }
 
         if (total_distance_traveled > CameraRange.y)

@@ -7,6 +7,8 @@ class RMObject : public Object {
 
 protected:
 
+	void setUniforms(const Camera::Camera& camera);
+
 	//std::string sDF;
 	//std::string mainContent;
 
@@ -25,10 +27,9 @@ private:
 	virtual void setupMesh() override;
 
 public:
+	RMObject();
 	RMObject(ObjectAttributes::Common* attributes);
 	virtual void draw(Camera::Camera& camera) = 0;
-	~RMObject() {
-	}
 
 	//bool LoadSDF(const std::string& path);
 	//bool LoadMainContent(const std::string& path);

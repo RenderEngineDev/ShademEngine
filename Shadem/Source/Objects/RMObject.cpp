@@ -1,14 +1,29 @@
 #include "Objects/RMObject.h"
 
 
+RMObject::RMObject() : Object(new ObjectAttributes::Common())
+{
+	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/plane.obj");
+	this->meshes = meshPair.second;
+	this->setMeshResourceKey(meshPair.first);
+}
+
 RMObject::RMObject(ObjectAttributes::Common* attributes) : Object(attributes)
 {
 	auto meshPair = ResourceManager::createOrGetMesh("../Shadem/Assets/Default_Resources/Models/plane.obj");
 	this->meshes = meshPair.second;
 	this->setMeshResourceKey(meshPair.first);
 
-
 	//setupMesh();
+}
+
+void RMObject::setUniforms(const Camera::Camera& camera)
+{
+	shader->setMat4("View", camera.getRotation());
+	shader->setFloat("Zoom", camera.zoom);
+	shader->setVec3("CameraPos", camera.position);
+	shader->setVec2("CameraRange", camera.getRange());
+	shader->setVec2("WindowSize", camera.window->getWindowSize());
 }
 
 void RMObject::setupMesh()

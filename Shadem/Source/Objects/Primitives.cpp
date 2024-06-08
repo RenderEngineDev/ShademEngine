@@ -96,12 +96,8 @@ Primitives::RMSphere::RMSphere(ObjectAttributes::Sphereous* attributes, const st
 void Primitives::RMSphere::draw(Camera::Camera& camera)
 {
 	shader->use();
-	
-	shader->setMat4("View", camera.getRotation());
-	shader->setFloat("Zoom", camera.zoom);
-	shader->setVec3("CameraPos", camera.position);
-	shader->setVec2("CameraRange", camera.getRange());
-	shader->setVec2("WindowSize", camera.window->getWindowSize());
+	setUniforms(camera);
+
 	shader->setVec3("SpherePos", attributes->position);
 	shader->setVec3("Scale", attributes->scale);
 
