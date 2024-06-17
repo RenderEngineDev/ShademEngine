@@ -29,6 +29,7 @@ layout(binding = 8) buffer fforce_visc_y { float force_visc_y [  ]; };
 layout(binding = 9) buffer fvz { float vz [  ]; };
 layout(binding = 10) buffer fforce_pres_z { float force_pres_z [  ]; };
 layout(binding = 11) buffer fforce_visc_z { float force_visc_z [  ]; };
+layout(binding = 12) buffer fprojected_particles { vec4 projected_particles []; };
 
 layout( local_size_x = 64, local_size_y = 1, local_size_z = 1 ) in;
 const int SW = 1;// 1280;

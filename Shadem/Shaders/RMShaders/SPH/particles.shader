@@ -16,6 +16,8 @@ uniform float gx;
 uniform float dt;
 uniform float k;                 // J/(mol*K) - gas constant
 uniform float M_PI;
+uniform vec4 SPHSphereRadius;
+uniform mat4 projection;
 
 layout(binding = 0) buffer fparticle { vec4 p [ ]; };
 layout(binding = 1) buffer fvx { float vx [  ]; };
@@ -29,6 +31,10 @@ layout(binding = 8) buffer fforce_visc_y { float force_visc_y [  ]; };
 layout(binding = 9) buffer fvz { float vz [  ]; };
 layout(binding = 10) buffer fforce_pres_z { float force_pres_z [  ]; };
 layout(binding = 11) buffer fforce_visc_z { float force_visc_z [  ]; };
+layout(binding = 12) buffer fprojected_particles { vec4 projected_particles []; };
+
+//uniform vec4 SPHScale;
+//unifrom vec4 SPHPos;
 
 layout( local_size_x = 64, local_size_y = 1, local_size_z = 1 ) in;
 const int SW = 1;
@@ -132,6 +138,17 @@ void main()
 	p[idx].x = pxnew; // *W;
 	p[idx].y = pynew; // *H;
 	p[idx].z = pznew; // *H;
+
+
+	projected_particles[idx] = projection * (p[idx] - vec4(0.5f,0.5f,0.5f,0));
+	vec4 pointOnSphere = projection * (projected_particles[idx] - vec4(0.5f,0.5f,0.5f,0) + vec4(length( vec3(SPHSphereRadius) * SPHSphereRadius.w),0,0,0) );
+
+	projected_particles[idx] /= projected_particles[idx].w;
+	pointOnSphere /= pointOnSphere.w;
+
+	float projectedR = distance(vec3(pointOnSphere), vec3(projected_particles[idx]));
+
+	projected_particles[idx].w = projectedR;
 
 }
 

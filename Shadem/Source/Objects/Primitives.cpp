@@ -45,6 +45,27 @@ Primitives::Cube::Cube(ObjectAttributes::Common* attributes, const std::string& 
 	//setupMesh();
 }
 
+void Primitives::Cube::draw(Camera::Camera& camera)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	shader->use();
+
+	glm::mat4& model = glm::mat4(1.0f);
+	evaluateBasicModelTransformations(model);
+	shader->setMat4("MVP", camera.getProjection() * camera.getView() * model);
+	shader->setVec3("cameraPosition", camera.position);
+
+	for (auto& mesh : *meshes)
+		mesh->Draw(shader);
+
+
+	//std::cout << (*meshes)[0]->vertices[0].position.x << " " << (*meshes)[0]->vertices[0].position.y << " " << (*meshes)[0]->vertices[0].position.z << " | ";
+	//glm::vec4 proj = camera.getProjection()* camera.getView() * glm::vec4((*meshes)[0]->vertices[0].position,1);
+	//std::cout << proj.x << " " << proj.y << " " << proj.z << "\n";
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 void Primitives::Cube::setupMesh() {
 
 	std::vector<Vertex> vertices = std::vector<Vertex>({

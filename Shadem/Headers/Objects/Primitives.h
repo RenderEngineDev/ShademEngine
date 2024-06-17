@@ -22,7 +22,7 @@ namespace Primitives {
 	class Cube : public Object {
 	public:
 		Cube(ObjectAttributes::Common* attributes, const std::string& vertFilePath, const std::string& fragFilePath);
-		//virtual void draw(Camera::Camera &camera) override;
+		virtual void draw(Camera::Camera &camera) override;
 		virtual void update(Camera::Camera& camera) override;
 	private:
 		void setupMesh();

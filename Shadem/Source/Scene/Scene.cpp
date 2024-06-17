@@ -8,6 +8,8 @@ Scene::Scene() {
 
 Scene::~Scene() {
 	delete camera;
+	for (auto o : objects)
+		delete o;
 }
 
 int Scene::configure() {

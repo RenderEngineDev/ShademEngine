@@ -70,11 +70,11 @@ namespace Camera {
             view = getViewMatrix();
         }
 
-        glm::mat4& getProjection() {
+        glm::mat4 getProjection() const {
             return projection;
         }
 
-        glm::mat4& getView() {
+        glm::mat4 getView() const{
             return view;
         }
 
