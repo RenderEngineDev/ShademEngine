@@ -24,6 +24,7 @@ void RMObject::setUniforms(const Camera::Camera& camera)
 	shader->setVec3("CameraPos", camera.position);
 	shader->setVec2("CameraRange", camera.getRange());
 	shader->setVec2("WindowSize", camera.window->getWindowSize());
+	shader->setVec3("CameraFront", camera.front);
 }
 
 void RMObject::setupMesh()

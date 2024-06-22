@@ -50,7 +50,8 @@ void SPH::init()
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, p);
 	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 12, projectedP);
 	shader->setInt("N",N);
-	shader->setFloat("ballScale", ballScale);
+	shader->setFloat("BallScale", ballScale);
+	shader->setFloat("MergeFactor", mergeFactor);
 
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -232,6 +233,7 @@ void SPH::draw(Camera::Camera& camera)
 	//shader->setBool("sampleDepth", false);
 	shader->setVec3("SPHPos", attributes->position);
 	shader->setVec3("Scale", attributes->scale);
+	shader->setVec4("Color", color);
 	//shader->setVec2("WindowSize", camera.window->getWindowSize());
 
 	//shader->setInt("colorSampler", 0);
@@ -269,7 +271,9 @@ void SPH::update(Camera::Camera& camera)
 	glm::mat4& model = glm::mat4(1.0f);
 	evaluateBasicModelTransformations(model);
 	particleShader->setMat4("projection", camera.getProjection() * camera.getView() * model);
-	particleShader->setVec2("SPHSphereRadius", glm::vec4(attributes->scale, ballScale));
+	particleShader->setVec4("SPHSphereRadius", glm::vec4(attributes->scale, ballScale));
+	particleShader->setFloat("Zoom", camera.zoom);
+	//particleShader->setFloat("CameraPosZ", camera.position.z);
 	particleShader->dispatch((N + 63) / 64, 1, 1);
 
 	t += 0.04;
@@ -282,10 +286,12 @@ void SPH::update(Camera::Camera& camera)
 	//for (int i = 0; i < projectedParticles.size(); ++i) {
 	//	projectedParticles[i] = read_data[i];
 	//	//particles[i].y = 0;
-	//	std::cout << particles[i].x << " " << particles[i].y << " " << particles[i].z << " | ";
+	//	//std::cout << particles[i].x << " " << particles[i].y << " " << particles[i].z << " | ";
 	//	//projectedParticles[i] = camera.getProjection() * camera.getView() * model * glm::vec4(particles[i].x - 0.5f, particles[i].y - 0.5f, particles[i].z - 0.5f, particles[i].w);
 	//	//projectedParticles[i] /= projectedParticles[i].w;
 	//	std::cout << projectedParticles[i].x << " " << projectedParticles[i].y << " " << projectedParticles[i].z << " " << projectedParticles[i].w << "\n";
+	//	//glm::vec3 pGlobalPos = glm::vec3(particles[i] - 0.5f) * attributes->scale + attributes->position;
+	//	//std::cout << glm::dot(glm::normalize(pGlobalPos - camera.position), camera.front) << " " << glm::radians(camera.zoom) << "\n";
 	//}
 	//glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 

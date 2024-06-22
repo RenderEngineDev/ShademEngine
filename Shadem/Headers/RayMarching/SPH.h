@@ -20,8 +20,9 @@ private:
 
 	float t = 0.01f;
 	float ballScale = 0.01f;
+	float mergeFactor = 0.1f;
 
-	int n = 5;
+	int n = 8;
 	int N = n * n * n;
 	unsigned int p, vx, vy, vz, rho, mass, fpressx, fpressy, fpressz, fviscx, fviscy, fviscz, projectedP;
 	unsigned int FBO, depthTexture, colorTexture, RBO, MSAA;
@@ -31,6 +32,8 @@ private:
 	float mass0 = 0.00003;
 
 	glm::vec2 RMresolution = glm::vec2(1920, 1080);
+
+	glm::vec4 color = glm::vec4(39 / 255.0f, 230 / 255.0f, 220 / 255.0f, 0.7);
 
 	std::vector<float> vx_cpu, vy_cpu, vz_cpu, rho_cpu, mass_cpu;
 	std::vector<float> force_pres_x_cpu, force_pres_y_cpu, force_pres_z_cpu, force_visc_x_cpu, force_visc_y_cpu, force_visc_z_cpu;

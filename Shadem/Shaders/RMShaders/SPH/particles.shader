@@ -16,6 +16,8 @@ uniform float gx;
 uniform float dt;
 uniform float k;                 // J/(mol*K) - gas constant
 uniform float M_PI;
+uniform float Zoom;
+//uniform float CameraPosZ;
 uniform vec4 SPHSphereRadius;
 uniform mat4 projection;
 
@@ -139,16 +141,21 @@ void main()
 	p[idx].y = pynew; // *H;
 	p[idx].z = pznew; // *H;
 
+	//p[idx] = vec4(0,0,0,1);
 
 	projected_particles[idx] = projection * (p[idx] - vec4(0.5f,0.5f,0.5f,0));
-	vec4 pointOnSphere = projection * (projected_particles[idx] - vec4(0.5f,0.5f,0.5f,0) + vec4(length( vec3(SPHSphereRadius) * SPHSphereRadius.w),0,0,0) );
+	vec4 pointOnSphere = projection * (p[idx] - vec4(0.5f,0.5f,0.5f,0) + vec4(length( vec3(SPHSphereRadius) * SPHSphereRadius.w),0,0,0) );
 
 	projected_particles[idx] /= projected_particles[idx].w;
 	pointOnSphere /= pointOnSphere.w;
 
-	float projectedR = distance(vec3(pointOnSphere), vec3(projected_particles[idx]));
+	//float projectedR = length( SPHSphereRadius * SPHSphereRadius.w) * (cos(Zoom * 0.5)/sin(Zoom * 0.5)) / projected_particles[idx].z;
+	//float projectedR = distance(vec3(pointOnSphere), vec3(projected_particles[idx]));
 
-	projected_particles[idx].w = projectedR;
+	vec3 projectedRPos = vec3(pointOnSphere - projected_particles[idx]);
+	float projectedRSquare = dot(projectedRPos,projectedRPos);
+
+	projected_particles[idx].w = projectedRSquare;
 
 }
 
